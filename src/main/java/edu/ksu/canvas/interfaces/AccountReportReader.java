@@ -1,12 +1,10 @@
 package edu.ksu.canvas.interfaces;
 
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
 
 import edu.ksu.canvas.model.report.AccountReport;
-import org.apache.hc.core5.http.ParseException;
 
 public interface AccountReportReader extends CanvasReader<AccountReport, AccountReportReader> {
 
@@ -17,7 +15,7 @@ public interface AccountReportReader extends CanvasReader<AccountReport, Account
      * @return a list of run reports specified by the report ID
      * @throws IOException When there is an error communicating with Canvas
      */
-    List<AccountReport> listReports(String accountId, String report) throws IOException, URISyntaxException, ParseException;
+    List<AccountReport> listReports(String accountId, String report) throws IOException;
 
     /**
      * Pull back the status of a given report.
@@ -27,5 +25,5 @@ public interface AccountReportReader extends CanvasReader<AccountReport, Account
      * @return a report outlining the status of its run, or a summary of its completed run
      * @throws IOException When there is an error communicating with Canvas
      */
-    Optional<AccountReport> reportStatus(String accountId, String report, Long id) throws IOException, URISyntaxException, ParseException;
+    Optional<AccountReport> reportStatus(String accountId, String report, Long id) throws IOException;
 }

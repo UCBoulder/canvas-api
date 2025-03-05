@@ -11,13 +11,11 @@ import edu.ksu.canvas.net.RestClient;
 import edu.ksu.canvas.oauth.OauthToken;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.hc.core5.http.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
-import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,7 +29,7 @@ public class LoginImpl extends BaseImpl<Login, LoginReader, LoginWriter> impleme
     }
 
     @Override
-    public List<Login> getLoginForUser(String userId) throws IOException, URISyntaxException, ParseException {
+    public List<Login> getLoginForUser(String userId) throws IOException {
         LOG.debug("Retrieving logins for user id {}", userId);
         String url = buildCanvasUrl(String.format("users/%s/logins", userId), emptyMap());
 
@@ -39,7 +37,7 @@ public class LoginImpl extends BaseImpl<Login, LoginReader, LoginWriter> impleme
     }
 
     @Override
-    public Optional<Login> updateLogin(Login login) throws IOException, URISyntaxException, ParseException {
+    public Optional<Login> updateLogin(Login login) throws IOException {
         LOG.debug("Updating login {} on account {}", login.getId(), login.getAccountId());
         if(StringUtils.isAnyBlank(login.getAccountId(), login.getId())) {
             throw new IllegalArgumentException("Account ID and Login ID are required to update a login");
@@ -51,7 +49,7 @@ public class LoginImpl extends BaseImpl<Login, LoginReader, LoginWriter> impleme
     }
 
     @Override
-    public Optional<Login> deleteLogin(Login login) throws IOException, URISyntaxException, ParseException {
+    public Optional<Login> deleteLogin(Login login) throws IOException {
         LOG.debug("Deleting login {} for user {}", login.getId(), login.getUserId());
         if(StringUtils.isAnyBlank(login.getUserId(), login.getId())) {
             throw new IllegalArgumentException("User ID and Login ID are required to delete a login");

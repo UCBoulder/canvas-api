@@ -4,10 +4,8 @@ import edu.ksu.canvas.model.assignment.Assignment;
 import edu.ksu.canvas.requestOptions.GetSingleAssignmentOptions;
 import edu.ksu.canvas.requestOptions.ListCourseAssignmentsOptions;
 import edu.ksu.canvas.requestOptions.ListUserAssignmentOptions;
-import org.apache.hc.core5.http.ParseException;
 
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,7 +19,7 @@ public interface AssignmentReader extends CanvasReader<Assignment, AssignmentRea
      * @return The assignment returned by Canvas or an empty Optional
      * @throws IOException When there is an error communicating with Canvas
      */
-    Optional<Assignment> getSingleAssignment(GetSingleAssignmentOptions options) throws IOException, URISyntaxException, ParseException;
+    Optional<Assignment> getSingleAssignment(GetSingleAssignmentOptions options) throws IOException;
 
     /**
      * Retrieve a list of assignments associated with a course
@@ -29,7 +27,7 @@ public interface AssignmentReader extends CanvasReader<Assignment, AssignmentRea
      * @return List of assignments in the requested course
      * @throws IOException When there is an error communicating with Canvas
      */
-    List<Assignment> listCourseAssignments(ListCourseAssignmentsOptions options) throws IOException, ParseException, URISyntaxException;
+    List<Assignment> listCourseAssignments(ListCourseAssignmentsOptions options) throws IOException;
 
     /**
      * Retrieve a list of assignments associated with the given user/course combination
@@ -37,5 +35,5 @@ public interface AssignmentReader extends CanvasReader<Assignment, AssignmentRea
      * @return List of assignments for the user/course combination
      * @throws IOException When there is an error communicating with Canvas
      */
-    List<Assignment> listUserAssignments(ListUserAssignmentOptions options) throws IOException, URISyntaxException, ParseException;
+    List<Assignment> listUserAssignments(ListUserAssignmentOptions options) throws IOException;
 }

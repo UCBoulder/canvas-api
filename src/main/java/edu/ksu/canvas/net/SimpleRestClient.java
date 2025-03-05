@@ -70,7 +70,7 @@ public class SimpleRestClient implements RestClient {
 
     @Override
     public Response sendApiGet(@NotNull OauthToken token, @NotNull String url,
-                               int connectTimeout, int readTimeout) throws IOException, ParseException {
+                               int connectTimeout, int readTimeout) throws IOException {
 
         LOG.debug("Sending GET request to URL: " + url);
         Long beginTime = System.currentTimeMillis();
@@ -81,11 +81,7 @@ public class SimpleRestClient implements RestClient {
 
             httpClient.execute(httpGet, httpResponse -> {
                 //deal with the actual content
-                try {
-                    response.setContent(handleResponse(httpResponse, httpGet));
-                } catch (URISyntaxException e) {
-                    throw new RuntimeException(e);
-                }
+                response.setContent(handleResponse(httpResponse, httpGet));
                 response.setResponseCode(httpResponse.getCode());
                 Long endTime = System.currentTimeMillis();
                 LOG.debug("GET call took: " + (endTime - beginTime) + "ms");
@@ -111,18 +107,18 @@ public class SimpleRestClient implements RestClient {
     }
 
     @Override
-    public Response sendJsonPut(OauthToken token, String url, String json, int connectTimeout, int readTimeout) throws IOException, ParseException {
+    public Response sendJsonPut(OauthToken token, String url, String json, int connectTimeout, int readTimeout) throws IOException {
         return sendJsonPostOrPut(token, url, json, connectTimeout, readTimeout, "PUT");
     }
 
     @Override
-    public Response sendJsonPost(OauthToken token, String url, String json, int connectTimeout, int readTimeout) throws IOException, ParseException {
+    public Response sendJsonPost(OauthToken token, String url, String json, int connectTimeout, int readTimeout) throws IOException {
         return sendJsonPostOrPut(token, url, json, connectTimeout, readTimeout, "POST");
     }
 
     // PUT and POST are identical calls except for the header specifying the method
     private Response sendJsonPostOrPut(OauthToken token, String url, String json,
-                                       int connectTimeout, int readTimeout, String method) throws IOException , ParseException {
+                                       int connectTimeout, int readTimeout, String method) throws IOException {
         LOG.debug("Sending JSON " + method + " to URL: " + url);
         Response response = new Response();
 
@@ -142,12 +138,7 @@ public class SimpleRestClient implements RestClient {
         action.setEntity(requestBody);
         try {
             httpClient.execute(action, httpResponse -> {
-                String content = null;
-                try {
-                    content = handleResponse(httpResponse, action);
-                } catch (URISyntaxException e) {
-                    throw new RuntimeException(e);
-                }
+                String content = handleResponse(httpResponse, action);
                 response.setContent(content);
                 response.setResponseCode(httpResponse.getCode());
                 Long endTime = System.currentTimeMillis();
@@ -163,7 +154,7 @@ public class SimpleRestClient implements RestClient {
 
     @Override
     public Response sendApiPost(OauthToken token, String url, Map<String, List<String>> postParameters,
-                                int connectTimeout, int readTimeout) throws InvalidOauthTokenException, IOException, ParseException {
+                                int connectTimeout, int readTimeout) throws InvalidOauthTokenException, IOException {
         LOG.debug("Sending API POST request to URL: " + url);
         Response response = new Response();
         HttpClient httpClient = createHttpClient(connectTimeout, readTimeout);
@@ -174,12 +165,7 @@ public class SimpleRestClient implements RestClient {
 
         httpPost.setEntity(new UrlEncodedFormEntity(params, Charset.forName(CanvasConstants.URLENCODING_TYPE)));
         httpClient.execute(httpPost, httpResponse -> {
-            String content = null;
-            try {
-                content = handleResponse(httpResponse, httpPost);
-            } catch (URISyntaxException e) {
-                throw new RuntimeException(e);
-            }
+            String content = handleResponse(httpResponse, httpPost);
             response.setContent(content);
             response.setResponseCode(httpResponse.getCode());
             Long endTime = System.currentTimeMillis();
@@ -191,7 +177,7 @@ public class SimpleRestClient implements RestClient {
 
     @Override
     public Response sendApiPostFile(OauthToken token, String url, Map<String, List<String>> postParameters, String fileParameter, String filePath, InputStream is,
-                                int connectTimeout, int readTimeout) throws InvalidOauthTokenException, IOException, ParseException {
+                                int connectTimeout, int readTimeout) throws InvalidOauthTokenException, IOException {
         LOG.debug("Sending API POST file request to URL: " + url);
         Response response = new Response();
         HttpClient httpClient = createHttpClient(connectTimeout, readTimeout);
@@ -214,12 +200,7 @@ public class SimpleRestClient implements RestClient {
 
         httpPost.setEntity(entityBuilder.build());
         httpClient.execute(httpPost, httpResponse -> {
-            String content = null;
-            try {
-                content = handleResponse(httpResponse, httpPost);
-            } catch (URISyntaxException e) {
-                throw new RuntimeException(e);
-            }
+            String content = handleResponse(httpResponse, httpPost);
 
             response.setContent(content);
             response.setResponseCode(httpResponse.getCode());
@@ -232,7 +213,7 @@ public class SimpleRestClient implements RestClient {
 
     @Override
     public Response sendApiPut(OauthToken token, String url, Map<String, List<String>> putParameters,
-                               int connectTimeout, int readTimeout) throws InvalidOauthTokenException, IOException, ParseException {
+                               int connectTimeout, int readTimeout) throws InvalidOauthTokenException, IOException {
         LOG.debug("Sending API PUT request to URL: " + url);
         Response response = new Response();
         HttpClient httpClient = createHttpClient(connectTimeout, readTimeout);
@@ -243,12 +224,7 @@ public class SimpleRestClient implements RestClient {
 
         httpPut.setEntity(new UrlEncodedFormEntity(params, Charset.forName(CanvasConstants.URLENCODING_TYPE)));
         httpClient.execute(httpPut, httpResponse -> {
-            String content = null;
-            try {
-                content = handleResponse(httpResponse, httpPut);
-            } catch (URISyntaxException e) {
-                throw new RuntimeException(e);
-            }
+            String content = handleResponse(httpResponse, httpPut);
 
             response.setContent(content);
             response.setResponseCode(httpResponse.getCode());
@@ -262,7 +238,7 @@ public class SimpleRestClient implements RestClient {
 
     @Override
     public Response sendApiDelete(OauthToken token, String url, Map<String, List<String>> deleteParameters,
-                                  int connectTimeout, int readTimeout) throws InvalidOauthTokenException, IOException, ParseException {
+                                  int connectTimeout, int readTimeout) throws InvalidOauthTokenException, IOException {
         LOG.debug("Sending API DELETE request to URL: " + url);
         Response response = new Response();
 
@@ -288,12 +264,7 @@ public class SimpleRestClient implements RestClient {
 
         httpDelete.setEntity(new UrlEncodedFormEntity(params, Charset.forName(CanvasConstants.URLENCODING_TYPE)));
         httpClient.execute(httpDelete, httpResponse -> {
-            String content = null;
-            try {
-                content = handleResponse(httpResponse, httpDelete);
-            } catch (URISyntaxException e) {
-                throw new RuntimeException(e);
-            }
+            String content = handleResponse(httpResponse, httpDelete);
             response.setContent(content);
             response.setResponseCode(httpResponse.getCode());
             Long endTime = System.currentTimeMillis();
@@ -323,11 +294,7 @@ public class SimpleRestClient implements RestClient {
         httpPost.setEntity(entityBuilder.build());
 
         return client.execute(httpPost, httpResponse -> {
-            try {
-                checkHeaders(httpResponse, httpPost, true);
-            } catch (URISyntaxException e) {
-                throw new RuntimeException(e);
-            }
+            checkHeaders(httpResponse, httpPost, true);
             int httpStatus = httpResponse.getCode();
             if (httpStatus == 201 || (300 <= httpStatus && httpStatus <= 399)) {
                 Header location = httpResponse.getFirstHeader("Location");
@@ -342,13 +309,14 @@ public class SimpleRestClient implements RestClient {
         });
     }
 
-    private void checkHeaders(ClassicHttpResponse httpResponse, HttpUriRequestBase request, boolean allowRedirect) throws URISyntaxException, ParseException {
+    private void checkHeaders(ClassicHttpResponse httpResponse, HttpUriRequestBase request, boolean allowRedirect) {
         int statusCode = httpResponse.getCode();
         double rateLimitThreshold = 0.1;
         double xRateCost = 0;
         double xRateLimitRemaining = 0;
-
+        URI uri = null;
         try {
+            uri = request.getUri();
             xRateCost = Double.parseDouble(httpResponse.getFirstHeader("x-request-cost").getValue());
             xRateLimitRemaining = Double.parseDouble(httpResponse.getFirstHeader("x-rate-limit-remaining").getValue());
 
@@ -356,11 +324,13 @@ public class SimpleRestClient implements RestClient {
             //See https://canvas.instructure.com/doc/api/file.throttling.html.
             if(xRateLimitRemaining < rateLimitThreshold) {
                 LOG.error("Canvas API rate limit exceeded. Bucket quota: " + xRateLimitRemaining + " Cost: " + xRateCost
-                        + " Threshold: " + rateLimitThreshold + " HTTP status: " + statusCode + " Requested URL: " + request.getUri());
-                throw new RateLimitException(extractErrorMessageFromResponse(httpResponse), String.valueOf(request.getUri()));
+                        + " Threshold: " + rateLimitThreshold + " HTTP status: " + statusCode + " Requested URL: " + uri);
+                throw new RateLimitException(extractErrorMessageFromResponse(httpResponse), String.valueOf(uri));
             }
         } catch (NullPointerException e) {
             LOG.debug("Rate not being limited: " + e);
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
         }
         if (statusCode == 401) {
             //If the WWW-Authenticate header is set, it is a token problem.
@@ -374,33 +344,37 @@ public class SimpleRestClient implements RestClient {
             throw new UnauthorizedException();
         }
         if(statusCode == 403) {
-            LOG.error("Canvas has throttled this request. Requested URL: " + request.getUri());
-            throw new ThrottlingException(extractErrorMessageFromResponse(httpResponse), String.valueOf(request.getUri()));
+            LOG.error("Canvas has throttled this request. Requested URL: " + uri);
+            throw new ThrottlingException(extractErrorMessageFromResponse(httpResponse), String.valueOf(uri));
         }
         if(statusCode == 404) {
-            LOG.error("Object not found in Canvas. Requested URL: " + request.getUri());
-            throw new ObjectNotFoundException(extractErrorMessageFromResponse(httpResponse), String.valueOf(request.getUri()));
+            LOG.error("Object not found in Canvas. Requested URL: " + uri);
+            throw new ObjectNotFoundException(extractErrorMessageFromResponse(httpResponse), String.valueOf(uri));
         }
         if(statusCode == 504) {
-            LOG.error("504 Gateway Time-out while requesting: " + request.getUri());
-            throw new RetriableException("status code: 504, reason phrase: Gateway Time-out", String.valueOf(request.getUri()));
+            LOG.error("504 Gateway Time-out while requesting: " + uri);
+            throw new RetriableException("status code: 504, reason phrase: Gateway Time-out", String.valueOf(uri));
         }
         // If we receive a 5xx exception, we should not wrap it in an unchecked exception for upstream clients to deal with.
         if(statusCode < 200 || (statusCode > (allowRedirect?399:299) && statusCode <= 499)) {
-            LOG.error("HTTP status " + statusCode + " returned from " + request.getUri());
+            LOG.error("HTTP status " + statusCode + " returned from " + uri);
             handleError(request, httpResponse);
         }
         //TODO Handling of 422 when the entity is malformed.
     }
 
-    private void handleError(ClassicHttpRequest httpRequest, ClassicHttpResponse httpResponse) throws URISyntaxException, ParseException {
+    private void handleError(ClassicHttpRequest httpRequest, ClassicHttpResponse httpResponse) {
         for (ErrorHandler handler : errorHandlers) {
             if (handler.shouldHandle(httpRequest, httpResponse)) {
                 handler.handle(httpRequest, httpResponse);
             }
         }
         String canvasErrorString = extractErrorMessageFromResponse(httpResponse);
-        throw new CanvasException(canvasErrorString, String.valueOf(httpRequest.getUri()));
+        try {
+            throw new CanvasException(canvasErrorString, String.valueOf(httpRequest.getUri()));
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
@@ -440,7 +414,7 @@ public class SimpleRestClient implements RestClient {
         return message;
     }
 
-    private String handleResponse(ClassicHttpResponse httpResponse, HttpUriRequestBase request) throws IOException, URISyntaxException, ParseException {
+    private String handleResponse(ClassicHttpResponse httpResponse, HttpUriRequestBase request) throws IOException {
         checkHeaders(httpResponse, request, false);
         return new BasicHttpClientResponseHandler().handleResponse(httpResponse);
     }

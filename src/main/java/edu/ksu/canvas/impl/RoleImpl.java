@@ -8,13 +8,11 @@ import edu.ksu.canvas.net.RestClient;
 import edu.ksu.canvas.oauth.OauthToken;
 import edu.ksu.canvas.requestOptions.ListRolesOptions;
 
-import org.apache.hc.core5.http.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
-import java.net.URISyntaxException;
 import java.util.List;
 
 public class RoleImpl extends BaseImpl<Role, RoleReader, RoleWriter> implements RoleReader, RoleWriter {
@@ -27,7 +25,7 @@ public class RoleImpl extends BaseImpl<Role, RoleReader, RoleWriter> implements 
     }
 
     @Override
-    public List<Role> listRoles(ListRolesOptions options) throws IOException, URISyntaxException, ParseException {
+    public List<Role> listRoles(ListRolesOptions options) throws IOException {
         LOG.debug("Retrieving roles for account {}", options.getAccountId());
         String url = buildCanvasUrl("accounts/" + options.getAccountId() + "/roles", options.getOptionsMap());
         return getListFromCanvas(url);

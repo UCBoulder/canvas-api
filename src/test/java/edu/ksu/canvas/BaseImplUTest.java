@@ -2,13 +2,11 @@ package edu.ksu.canvas;
 
 import com.google.gson.JsonSyntaxException;
 import edu.ksu.canvas.model.TestCanvasModel;
-import org.apache.hc.core5.http.ParseException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
@@ -32,7 +30,7 @@ class BaseImplUTest extends CanvasTestBase {
     }
 
     @Test
-    void callbackIsCalledWhenUsingWithCallback() throws IOException, URISyntaxException, ParseException {
+    void callbackIsCalledWhenUsingWithCallback() throws IOException{
         fakeRestClient.addSuccessResponse(URL_FOR_FIRST_RESPONSE, "TestModels/TestModels1.json");
         Consumer<List<TestCanvasModel>> callback = modelList -> setCallbackWasCalled();
         canvasReader.withCallback(callback).getTestModels(URL_FOR_FIRST_RESPONSE);
@@ -40,7 +38,7 @@ class BaseImplUTest extends CanvasTestBase {
     }
 
     @Test
-    void callbackGetsParsedModel() throws IOException, URISyntaxException, ParseException {
+    void callbackGetsParsedModel() throws IOException {
         fakeRestClient.addSuccessResponse(URL_FOR_FIRST_RESPONSE, "TestModels/TestModels1.json");
         Consumer<List<TestCanvasModel>> callback = modelList -> {
             setCallbackWasCalled();
@@ -54,7 +52,7 @@ class BaseImplUTest extends CanvasTestBase {
     }
 
     @Test
-    void callbackGets2ndObject() throws IOException, URISyntaxException, ParseException {
+    void callbackGets2ndObject() throws IOException {
         fakeRestClient.addSuccessResponse(URL_FOR_FIRST_RESPONSE, URL_FOR_SECOND_RESPONSE, "TestModels/TestModels1.json");
         fakeRestClient.addSuccessResponse(URL_FOR_SECOND_RESPONSE, "TestModels/TestModels2.json");
         Consumer<List<TestCanvasModel>> callback = modelList -> {
@@ -76,7 +74,7 @@ class BaseImplUTest extends CanvasTestBase {
             fakeRestClient.addSuccessResponse(URL_FOR_SINGLE_OBJECT_RESPONSE, "TestModels/TestModel.json");
             Consumer<List<TestCanvasModel>> callback = modelList -> setCallbackWasCalled();
             canvasReader.withCallback(callback).getTestModels(URL_FOR_SINGLE_OBJECT_RESPONSE);
-        } catch (JsonSyntaxException | URISyntaxException | ParseException e) {
+        } catch (JsonSyntaxException e) {
             assertFalse( callbackWasCalled, "Expected callback to not be called upon invalid json");
             return;
         }
@@ -84,7 +82,7 @@ class BaseImplUTest extends CanvasTestBase {
     }
 
     @Test
-    void callbackIsNotSavedOnRepeatedCalls() throws IOException, URISyntaxException, ParseException {
+    void callbackIsNotSavedOnRepeatedCalls() throws IOException {
         fakeRestClient.addSuccessResponse(URL_FOR_FIRST_RESPONSE, "TestModels/TestModels1.json");
         Consumer<List<TestCanvasModel>> callback = modelList -> setCallbackWasCalled();
         canvasReader.withCallback(callback).getTestModels(URL_FOR_FIRST_RESPONSE);
@@ -95,7 +93,7 @@ class BaseImplUTest extends CanvasTestBase {
     }
 
     @Test
-    void getFromCanvasParsesObject() throws IOException, URISyntaxException, ParseException {
+    void getFromCanvasParsesObject() throws IOException {
         fakeRestClient.addSuccessResponse(URL_FOR_SINGLE_OBJECT_RESPONSE, "TestModels/TestModel.json");
         Optional<TestCanvasModel> modelOptional = canvasReader.getTestModel(URL_FOR_SINGLE_OBJECT_RESPONSE);
         TestCanvasModel model = modelOptional.orElseThrow(() -> new AssertionError("Expected getfromCanvas to return non-empty object"));

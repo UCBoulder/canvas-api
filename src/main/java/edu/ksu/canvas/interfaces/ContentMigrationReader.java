@@ -1,10 +1,8 @@
 package edu.ksu.canvas.interfaces;
 
 import edu.ksu.canvas.model.ContentMigration;
-import org.apache.hc.core5.http.ParseException;
 
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,7 +14,7 @@ public interface ContentMigrationReader extends CanvasReader<ContentMigration, C
      * @return A ContentMigration object
      * @throws IOException When there is an error communicating with Canvas
      */
-    Optional<ContentMigration> getCourseContentMigration(String courseId, Long id) throws IOException, URISyntaxException, ParseException;
+    Optional<ContentMigration> getCourseContentMigration(String courseId, Long id) throws IOException;
 
     /**
      * Returns a list of course content migrations.
@@ -24,7 +22,7 @@ public interface ContentMigrationReader extends CanvasReader<ContentMigration, C
      * @return A ContentMigration list
      * @throws IOException When there is an error communicating with Canvas
      */
-    List<ContentMigration> getCourseContentMigrations(String courseId) throws IOException, URISyntaxException, ParseException;
+    List<ContentMigration> getCourseContentMigrations(String courseId) throws IOException;
 
     /**
      * Returns a user content migration.
@@ -33,7 +31,7 @@ public interface ContentMigrationReader extends CanvasReader<ContentMigration, C
      * @return A ContentMigration object
      * @throws IOException When there is an error communicating with Canvas
      */
-    Optional<ContentMigration> getUserContentMigration(String userId, Long id) throws IOException, URISyntaxException, ParseException;
+    Optional<ContentMigration> getUserContentMigration(String userId, Long id) throws IOException;
 
     /**
      * Returns a list of user content migrations.
@@ -41,7 +39,7 @@ public interface ContentMigrationReader extends CanvasReader<ContentMigration, C
      * @return A ContentMigration list
      * @throws IOException When there is an error communicating with Canvas
      */
-    List<ContentMigration> getUserContentMigrations(String userId) throws IOException, URISyntaxException, ParseException;
+    List<ContentMigration> getUserContentMigrations(String userId) throws IOException;
 
     /**
      * Returns a group content migration.
@@ -50,7 +48,7 @@ public interface ContentMigrationReader extends CanvasReader<ContentMigration, C
      * @return A ContentMigration object
      * @throws IOException When there is an error communicating with Canvas
      */
-    Optional<ContentMigration> getGroupContentMigration(String groupId, Long id) throws IOException, URISyntaxException, ParseException;
+    Optional<ContentMigration> getGroupContentMigration(String groupId, Long id) throws IOException;
 
     /**
      * Returns a list of group content migrations.
@@ -58,7 +56,7 @@ public interface ContentMigrationReader extends CanvasReader<ContentMigration, C
      * @return A ContentMigration list
      * @throws IOException When there is an error communicating with Canvas
      */
-    List<ContentMigration> getGroupContentMigrations(String groupId) throws IOException, URISyntaxException, ParseException;
+    List<ContentMigration> getGroupContentMigrations(String groupId) throws IOException;
 
     /**
      * Returns a account content migration.
@@ -67,7 +65,7 @@ public interface ContentMigrationReader extends CanvasReader<ContentMigration, C
      * @return A ContentMigration object
      * @throws IOException When there is an error communicating with Canvas
      */
-    Optional<ContentMigration> getAccountContentMigration(String accountId, Long id) throws IOException, URISyntaxException, ParseException;
+    Optional<ContentMigration> getAccountContentMigration(String accountId, Long id) throws IOException;
 
     /**
      * Returns a list of account content migrations.
@@ -75,5 +73,5 @@ public interface ContentMigrationReader extends CanvasReader<ContentMigration, C
      * @return A ContentMigration list
      * @throws IOException When there is an error communicating with Canvas
      */
-    List<ContentMigration> getAccountContentMigrations(String accountId) throws IOException, URISyntaxException, ParseException;
+    List<ContentMigration> getAccountContentMigrations(String accountId) throws IOException;
 }

@@ -28,7 +28,7 @@ public class GenericErrorHandler implements ErrorHandler {
     }
 
     @Override
-    public void handle(ClassicHttpRequest httpRequest, ClassicHttpResponse httpResponse) throws ParseException {
+    public void handle(ClassicHttpRequest httpRequest, ClassicHttpResponse httpResponse) {
         Gson gson = GsonResponseParser.getDefaultGsonParser(false);
         try {
             String entityString = EntityUtils.toString(httpResponse.getEntity());
@@ -36,7 +36,7 @@ public class GenericErrorHandler implements ErrorHandler {
             if (response.getErrors() != null) {
                 throw new CanvasException("Failed to create user.", httpRequest.getRequestUri(), response);
             }
-        } catch (IOException e) {
+        } catch (IOException | ParseException e) {
             // Ignore.
         }
     }

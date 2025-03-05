@@ -2,10 +2,8 @@ package edu.ksu.canvas.interfaces;
 
 import edu.ksu.canvas.model.Role;
 import edu.ksu.canvas.requestOptions.ListRolesOptions;
-import org.apache.hc.core5.http.ParseException;
 
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.List;
 
 public interface RoleReader extends CanvasReader<Role, RoleReader> {
@@ -15,5 +13,5 @@ public interface RoleReader extends CanvasReader<Role, RoleReader> {
      * @return List of roles
      * @throws IOException When there is an error communicating with Canvas
      */
-    public List<Role> listRoles(ListRolesOptions options) throws IOException, URISyntaxException, ParseException;
+    public List<Role> listRoles(ListRolesOptions options) throws IOException;
 }

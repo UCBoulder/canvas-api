@@ -7,12 +7,10 @@ import edu.ksu.canvas.model.Course;
 import edu.ksu.canvas.oauth.NonRefreshableOauthToken;
 import edu.ksu.canvas.oauth.OauthToken;
 import edu.ksu.canvas.requestOptions.ListCurrentUserCoursesOptions;
-import org.apache.hc.core5.http.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.List;
 
 /**
@@ -67,14 +65,14 @@ public class TestLauncher {
         this.oauthToken = new NonRefreshableOauthToken(tokenString);
     }
 
-    public void getRootAccount() throws IOException, URISyntaxException, ParseException {
+    public void getRootAccount() throws IOException {
         CanvasApiFactory apiFactory = new CanvasApiFactory(canvasUrl);
         AccountReader acctReader = apiFactory.getReader(AccountReader.class, oauthToken);
         Account rootAccount = acctReader.getSingleAccount("1").get();
         LOG.info("Got account from Canvas: {}",  rootAccount.getName());
     }
 
-    public void getOwnCourses() throws IOException, URISyntaxException, ParseException {
+    public void getOwnCourses() throws IOException {
         CanvasApiFactory apiFactory = new CanvasApiFactory(canvasUrl);
         CourseReader courseReader = apiFactory.getReader(CourseReader.class, oauthToken);
         List<Course> myCourses = courseReader.listCurrentUserCourses(new ListCurrentUserCoursesOptions());

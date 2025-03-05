@@ -1,12 +1,10 @@
 package edu.ksu.canvas.interfaces;
 
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
 
 import edu.ksu.canvas.model.assignment.Quiz;
-import org.apache.hc.core5.http.ParseException;
 
 public interface QuizReader extends CanvasReader<Quiz, QuizReader>{
     /**
@@ -16,7 +14,7 @@ public interface QuizReader extends CanvasReader<Quiz, QuizReader>{
      * @return The assignment returned by Canvas or an empty Optional
      * @throws IOException When there is an error communicating with Canvas
      */
-    Optional<Quiz> getSingleQuiz(String courseId, String quizId) throws IOException, URISyntaxException, ParseException;
+    Optional<Quiz> getSingleQuiz(String courseId, String quizId) throws IOException;
 
     /**
      * Retrieve a list of quizzes from Canvas by its course Canvas ID number
@@ -24,5 +22,5 @@ public interface QuizReader extends CanvasReader<Quiz, QuizReader>{
      * @return List of quizzes in the course with the course ID
      * @throws IOException When there is an error communicating with Canvas
      */
-    List<Quiz> getQuizzesInCourse(String courseId) throws IOException, URISyntaxException, ParseException;
+    List<Quiz> getQuizzesInCourse(String courseId) throws IOException;
 }

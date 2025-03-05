@@ -6,13 +6,11 @@ import edu.ksu.canvas.interfaces.CourseReader;
 import edu.ksu.canvas.model.Course;
 import edu.ksu.canvas.net.FakeRestClient;
 import edu.ksu.canvas.requestOptions.GetSingleCourseOptions;
-import org.apache.hc.core5.http.ParseException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.time.ZonedDateTime;
 import java.util.Collections;
 import java.util.Date;
@@ -37,7 +35,7 @@ class CourseGetUTest extends CanvasTestBase {
     }
 
     @Test
-    void testGettingCourses() throws IOException, URISyntaxException, ParseException {
+    void testGettingCourses() throws IOException {
         String url = baseUrl + "/api/v1/courses/1234?include[]=course_image";
         fakeRestClient.addSuccessResponse(url, "SampleJson/course/GetCourseIncludeCourseImage.json");
         Optional<Course> optionalCourse = courseReader.getSingleCourse(new GetSingleCourseOptions("1234").includes(Collections.singletonList(GetSingleCourseOptions.Include.COURSE_IMAGE)));

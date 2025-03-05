@@ -7,12 +7,10 @@ import edu.ksu.canvas.model.Deposit;
 import edu.ksu.canvas.model.File;
 import edu.ksu.canvas.net.RestClient;
 import edu.ksu.canvas.oauth.OauthToken;
-import org.apache.hc.core5.http.ParseException;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Type;
-import java.net.URISyntaxException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -35,7 +33,7 @@ public class FileImpl extends BaseImpl<File, FileReader, FileWriter> implements 
     }
 
     @Override
-    public Optional<File> upload(Deposit deposit, InputStream in, String filename) throws IOException, URISyntaxException, ParseException {
+    public Optional<File> upload(Deposit deposit, InputStream in, String filename) throws IOException {
         Map<String, List<String>> params = deposit.getUploadParams().entrySet().stream()
                 .collect(Collectors.toMap(Map.Entry::getKey, e -> Collections.singletonList(e.getValue())));
         String location = canvasMessenger.sendUpload(deposit.getUploadUrl(), params, in, filename);
@@ -43,7 +41,7 @@ public class FileImpl extends BaseImpl<File, FileReader, FileWriter> implements 
     }
 
     @Override
-    public Optional<File> getFile(String url) throws IOException, URISyntaxException, ParseException {
+    public Optional<File> getFile(String url) throws IOException {
         return getFromCanvas(url);
     }
 

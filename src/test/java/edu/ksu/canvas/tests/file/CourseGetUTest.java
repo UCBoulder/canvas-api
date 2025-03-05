@@ -5,13 +5,11 @@ import edu.ksu.canvas.impl.FileImpl;
 import edu.ksu.canvas.interfaces.FileReader;
 import edu.ksu.canvas.model.File;
 import edu.ksu.canvas.net.FakeRestClient;
-import org.apache.hc.core5.http.ParseException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -31,7 +29,7 @@ public class CourseGetUTest extends CanvasTestBase {
     }
 
     @Test
-    public void testGettingCourses() throws IOException, URISyntaxException, ParseException {
+    public void testGettingCourses() throws IOException {
         String url = baseUrl + "/api/v1/files/123";
         fakeRestClient.addSuccessResponse(url, "SampleJson/file/GetFileSuccess.json");
         Optional<File> optionalFile = fileReader.getFile(url);

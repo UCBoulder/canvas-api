@@ -1,13 +1,11 @@
 package edu.ksu.canvas.interfaces;
 
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
 
 import edu.ksu.canvas.model.ExternalTool;
 import edu.ksu.canvas.requestOptions.ListExternalToolsOptions;
-import org.apache.hc.core5.http.ParseException;
 
 public interface ExternalToolReader extends CanvasReader<ExternalTool, ExternalToolReader>{
 
@@ -19,7 +17,7 @@ public interface ExternalToolReader extends CanvasReader<ExternalTool, ExternalT
      * @return The requested tool's configuration
      * @throws IOException if there is an error communicating with Canvas
      */
-    public Optional<ExternalTool> getExternalToolInAccount(String accountId, Long toolId) throws IOException, URISyntaxException, ParseException;
+    public Optional<ExternalTool> getExternalToolInAccount(String accountId, Long toolId) throws IOException;
 
     /**
      * Retrieve a specific external tool configuration in a given course
@@ -28,7 +26,7 @@ public interface ExternalToolReader extends CanvasReader<ExternalTool, ExternalT
      * @return The requested tool's configuration
      * @throws IOException if there is an error communicating with Canvas
      */
-    public Optional<ExternalTool> getExternalToolInCourse(String courseId, Long toolId) throws IOException, URISyntaxException, ParseException;
+    public Optional<ExternalTool> getExternalToolInCourse(String courseId, Long toolId) throws IOException;
 
     /**
      * Return a list of external tools registered to an account
@@ -36,7 +34,7 @@ public interface ExternalToolReader extends CanvasReader<ExternalTool, ExternalT
      * @return List of external tools in the account
      * @throws IOException if there is an error communicating with Canvas
      */
-    public List<ExternalTool> listExternalToolsInAccount(ListExternalToolsOptions options) throws IOException, URISyntaxException, ParseException;
+    public List<ExternalTool> listExternalToolsInAccount(ListExternalToolsOptions options) throws IOException;
 
     /**
      * Return a list of external tools registered to a course
@@ -44,7 +42,7 @@ public interface ExternalToolReader extends CanvasReader<ExternalTool, ExternalT
      * @return List of external tools in the course
      * @throws IOException if there is an error communicating with Canvas
      */
-    public List<ExternalTool> listExternalToolsInCourse(ListExternalToolsOptions options) throws IOException, URISyntaxException, ParseException;
+    public List<ExternalTool> listExternalToolsInCourse(ListExternalToolsOptions options) throws IOException;
 
     /**
      * Return a list of external tools registered to a group
@@ -52,5 +50,5 @@ public interface ExternalToolReader extends CanvasReader<ExternalTool, ExternalT
      * @return List of external tools in the group
      * @throws IOException if there is an error communicating with Canvas
      */
-    public List<ExternalTool> listExternalToolsInGroup(ListExternalToolsOptions options) throws IOException, URISyntaxException, ParseException;
+    public List<ExternalTool> listExternalToolsInGroup(ListExternalToolsOptions options) throws IOException;
 }

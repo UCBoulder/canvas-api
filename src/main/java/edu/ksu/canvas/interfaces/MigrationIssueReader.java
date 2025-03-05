@@ -1,10 +1,8 @@
 package edu.ksu.canvas.interfaces;
 
 import edu.ksu.canvas.model.MigrationIssue;
-import org.apache.hc.core5.http.ParseException;
 
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,7 +15,7 @@ public interface MigrationIssueReader extends CanvasReader<MigrationIssue, Migra
      * @return List of migration issues
      * @throws IOException When there is an error communicating with Canvas
      */
-    List<MigrationIssue> getCourseMigrationIssues(String courseId, Long migrationId) throws IOException, URISyntaxException, ParseException;
+    List<MigrationIssue> getCourseMigrationIssues(String courseId, Long migrationId) throws IOException;
 
     /**
      * Returns a migration issue.
@@ -27,7 +25,7 @@ public interface MigrationIssueReader extends CanvasReader<MigrationIssue, Migra
      * @return A migration issue
      * @throws IOException When there is an error communicating with Canvas
      */
-    Optional<MigrationIssue> getCourseMigrationIssue(String courseId, Long migrationId, Long issueId) throws IOException, URISyntaxException, ParseException;
+    Optional<MigrationIssue> getCourseMigrationIssue(String courseId, Long migrationId, Long issueId) throws IOException;
 
     /**
      * Returns a list migration issues.
@@ -36,7 +34,7 @@ public interface MigrationIssueReader extends CanvasReader<MigrationIssue, Migra
      * @return List of migration issues
      * @throws IOException When there is an error communicating with Canvas
      */
-    List<MigrationIssue> getUserMigrationIssues(String userId, Long migrationId) throws IOException, URISyntaxException, ParseException;
+    List<MigrationIssue> getUserMigrationIssues(String userId, Long migrationId) throws IOException;
 
     /**
      * Returns a migration issue.
@@ -46,7 +44,7 @@ public interface MigrationIssueReader extends CanvasReader<MigrationIssue, Migra
      * @return A migration issue
      * @throws IOException When there is an error communicating with Canvas
      */
-    Optional<MigrationIssue> getUserMigrationIssue(String userId, Long migrationId, Long issueId) throws IOException, URISyntaxException, ParseException;
+    Optional<MigrationIssue> getUserMigrationIssue(String userId, Long migrationId, Long issueId) throws IOException;
 
     /**
      * Returns a list migration issues.
@@ -55,7 +53,7 @@ public interface MigrationIssueReader extends CanvasReader<MigrationIssue, Migra
      * @return List of migration issues
      * @throws IOException When there is an error communicating with Canvas
      */
-    List<MigrationIssue> getGroupMigrationIssues(String groupId, Long migrationId) throws IOException, URISyntaxException, ParseException;
+    List<MigrationIssue> getGroupMigrationIssues(String groupId, Long migrationId) throws IOException;
 
     /**
      * Returns a migration issue.
@@ -65,7 +63,7 @@ public interface MigrationIssueReader extends CanvasReader<MigrationIssue, Migra
      * @return A migration issue
      * @throws IOException When there is an error communicating with Canvas
      */
-    Optional<MigrationIssue> getGroupMigrationIssue(String groupId, Long migrationId, Long issueId) throws IOException, URISyntaxException, ParseException;
+    Optional<MigrationIssue> getGroupMigrationIssue(String groupId, Long migrationId, Long issueId) throws IOException;
 
     /**
      * Returns a list migration issues.
@@ -74,7 +72,7 @@ public interface MigrationIssueReader extends CanvasReader<MigrationIssue, Migra
      * @return List of migration issues
      * @throws IOException When there is an error communicating with Canvas
      */
-    List<MigrationIssue> getAccountMigrationIssues(String accountId, Long migrationId) throws IOException, URISyntaxException, ParseException;
+    List<MigrationIssue> getAccountMigrationIssues(String accountId, Long migrationId) throws IOException;
 
     /**
      * Returns a migration issue.
@@ -84,5 +82,5 @@ public interface MigrationIssueReader extends CanvasReader<MigrationIssue, Migra
      * @return A migration issue
      * @throws IOException When there is an error communicating with Canvas
      */
-    Optional<MigrationIssue> getAccountMigrationIssue(String accountId, Long migrationId, Long issueId) throws IOException, URISyntaxException, ParseException;
+    Optional<MigrationIssue> getAccountMigrationIssue(String accountId, Long migrationId, Long issueId) throws IOException;
 }

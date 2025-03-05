@@ -1,10 +1,8 @@
 package edu.ksu.canvas.interfaces;
 
 import edu.ksu.canvas.model.Progress;
-import org.apache.hc.core5.http.ParseException;
 
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.Optional;
 
 public interface ProgressReader extends CanvasReader<Progress, ProgressReader> {
@@ -14,7 +12,7 @@ public interface ProgressReader extends CanvasReader<Progress, ProgressReader> {
      * @return A Progress object
      * @throws IOException When there is an error communicating with Canvas
      */
-    Optional<Progress> getProgress(String url) throws IOException, URISyntaxException, ParseException;
+    Optional<Progress> getProgress(String url) throws IOException;
 
     /**
      * Returns the progress of an asynchronous process by progress ID
@@ -22,5 +20,5 @@ public interface ProgressReader extends CanvasReader<Progress, ProgressReader> {
      * @return The requested Progress object
      * @throws IOException When there is an error communicating with Canvas
      */
-    Optional<Progress> getProgress(Long progressId) throws IOException, URISyntaxException, ParseException;
+    Optional<Progress> getProgress(Long progressId) throws IOException;
 }

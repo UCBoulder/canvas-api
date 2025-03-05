@@ -1,10 +1,8 @@
 package edu.ksu.canvas.interfaces;
 
 import edu.ksu.canvas.model.SisImport;
-import org.apache.hc.core5.http.ParseException;
 
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.Optional;
 
 public interface SisImportReader extends CanvasReader<SisImport, SisImportReader> {
@@ -15,5 +13,5 @@ public interface SisImportReader extends CanvasReader<SisImport, SisImportReader
      * @return A SisImport object
      * @throws IOException When there is an error communicating with Canvas
      */
-    Optional<SisImport> getSisImport(String accountId, Long id) throws IOException, URISyntaxException, ParseException;
+    Optional<SisImport> getSisImport(String accountId, Long id) throws IOException;
 }

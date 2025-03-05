@@ -6,11 +6,9 @@ import edu.ksu.canvas.interfaces.FeatureWriter;
 import edu.ksu.canvas.model.Feature;
 import edu.ksu.canvas.net.RestClient;
 import edu.ksu.canvas.oauth.OauthToken;
-import org.apache.hc.core5.http.ParseException;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
-import java.net.URISyntaxException;
 import java.util.Collections;
 import java.util.List;
 
@@ -43,19 +41,19 @@ public class FeatureImpl extends BaseImpl<Feature, FeatureReader, FeatureWriter>
     }
 
     @Override
-    public List<Feature> getCourseFeatures(String courseId) throws IOException, URISyntaxException, ParseException {
+    public List<Feature> getCourseFeatures(String courseId) throws IOException {
         String url = buildCanvasUrl("courses/"+ courseId+ "/features", Collections.emptyMap());
         return getListFromCanvas(url);
     }
 
     @Override
-    public List<Feature> getAccountFeatures(String accountId) throws IOException, URISyntaxException, ParseException {
+    public List<Feature> getAccountFeatures(String accountId) throws IOException {
         String url = buildCanvasUrl("accounts/"+ accountId+ "/features", Collections.emptyMap());
         return getListFromCanvas(url);
     }
 
     @Override
-    public List<Feature> getUserFeatures(String userId) throws IOException, URISyntaxException, ParseException {
+    public List<Feature> getUserFeatures(String userId) throws IOException {
         String url = buildCanvasUrl("users/"+ userId+ "/features", Collections.emptyMap());
         return getListFromCanvas(url);
     }

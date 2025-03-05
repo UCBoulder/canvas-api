@@ -12,13 +12,11 @@ import edu.ksu.canvas.requestOptions.GetAssignmentGroupOptions;
 import edu.ksu.canvas.requestOptions.ListAssignmentGroupOptions;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.hc.core5.http.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
-import java.net.URISyntaxException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -45,21 +43,21 @@ public class AssignmentGroupImpl extends BaseImpl<AssignmentGroup, AssignmentGro
     private static final Logger LOG = LoggerFactory.getLogger(AssignmentGroupImpl.class);
 
     @Override
-    public Optional<AssignmentGroup> getAssignmentGroup(GetAssignmentGroupOptions options) throws IOException, URISyntaxException, ParseException {
+    public Optional<AssignmentGroup> getAssignmentGroup(GetAssignmentGroupOptions options) throws IOException {
         LOG.debug("Fetching assignment group {} from course {}", options.getAssignmentGroupId(), options.getCourseId());
         String url = buildCanvasUrl("courses/" + options.getCourseId() + "/assignment_groups/" + options.getAssignmentGroupId(), options.getOptionsMap());
         return getFromCanvas(url);
     }
 
     @Override
-    public List<AssignmentGroup> listAssignmentGroup(ListAssignmentGroupOptions options) throws IOException, URISyntaxException, ParseException {
+    public List<AssignmentGroup> listAssignmentGroup(ListAssignmentGroupOptions options) throws IOException {
         LOG.debug("Listing assignment groups in course {}", options.getCourseId());
         String url = buildCanvasUrl("courses/" + options.getCourseId() + "/assignment_groups", options.getOptionsMap());
         return getListFromCanvas(url);
     }
 
     @Override
-    public Optional<AssignmentGroup> createAssignmentGroup(String courseId, AssignmentGroup assignmentGroup) throws IOException, URISyntaxException, ParseException {
+    public Optional<AssignmentGroup> createAssignmentGroup(String courseId, AssignmentGroup assignmentGroup) throws IOException {
         if(StringUtils.isBlank(courseId)) {
             throw new IllegalArgumentException("Must supply a course ID when creating an assignment group");
         }
@@ -70,7 +68,7 @@ public class AssignmentGroupImpl extends BaseImpl<AssignmentGroup, AssignmentGro
     }
 
     @Override
-    public Optional<AssignmentGroup> editAssignmentGroup(String courseId, AssignmentGroup assignmentGroup) throws IOException, URISyntaxException, ParseException {
+    public Optional<AssignmentGroup> editAssignmentGroup(String courseId, AssignmentGroup assignmentGroup) throws IOException {
         if(StringUtils.isBlank(courseId) || assignmentGroup == null || assignmentGroup.getId() == null || assignmentGroup.getId() == 0l) {
             throw new IllegalArgumentException("Course ID and assignment group ID must be provided");
         }
@@ -81,7 +79,7 @@ public class AssignmentGroupImpl extends BaseImpl<AssignmentGroup, AssignmentGro
     }
 
     @Override
-    public Optional<AssignmentGroup> deleteAssignmentGroup(DeleteAssignmentGroupOptions options) throws IOException, URISyntaxException, ParseException {
+    public Optional<AssignmentGroup> deleteAssignmentGroup(DeleteAssignmentGroupOptions options) throws IOException {
         LOG.debug("Deleting assignment group {} from course", options.getAssignmentGroupId(), options.getCourseId());
         String url = buildCanvasUrl("courses/" + options.getCourseId() + "/assignment_groups/" + options.getAssignmentGroupId(), options.getOptionsMap());
         Response response = canvasMessenger.deleteFromCanvas(oauthToken, url, Collections.emptyMap());

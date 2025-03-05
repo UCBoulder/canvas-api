@@ -1,10 +1,8 @@
 package edu.ksu.canvas.interfaces;
 
 import edu.ksu.canvas.model.Account;
-import org.apache.hc.core5.http.ParseException;
 
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.Optional;
 
 public interface AccountWriter extends CanvasWriter<Account, AccountWriter> {
@@ -15,7 +13,7 @@ public interface AccountWriter extends CanvasWriter<Account, AccountWriter> {
      * @return The newly created account
      * @throws IOException When there is an error communicating with Canvas
      */
-     Optional<Account> createAccount(String accountId, Account account) throws IOException, URISyntaxException, ParseException;
+     Optional<Account> createAccount(String accountId, Account account) throws IOException;
 
      /**
       * Update a account in Canvas
@@ -23,7 +21,7 @@ public interface AccountWriter extends CanvasWriter<Account, AccountWriter> {
       * @return The newly updated account
       * @throws IOException When there is an error communicating with Canvas
       */
-      Optional<Account> updateAccount(Account account) throws IOException, URISyntaxException, ParseException;
+      Optional<Account> updateAccount(Account account) throws IOException;
 
     /**
      * @param parentAccountId The ID of the parent account to the account to delete.
@@ -31,5 +29,5 @@ public interface AccountWriter extends CanvasWriter<Account, AccountWriter> {
      * @return true if the account was deleted
      * @throws IOException When there is an error communicating with Canvas
      */
-     Boolean deleteAccount(String parentAccountId, String accountId) throws IOException, URISyntaxException, ParseException;
+     Boolean deleteAccount(String parentAccountId, String accountId) throws IOException;
 }

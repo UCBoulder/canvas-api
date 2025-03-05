@@ -1,10 +1,8 @@
 package edu.ksu.canvas.interfaces;
 
 import edu.ksu.canvas.model.CourseSettings;
-import org.apache.hc.core5.http.ParseException;
 
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.Optional;
 
 public interface CourseSettingsReader extends CanvasReader<CourseSettings, CourseSettingsReader> {
@@ -18,5 +16,5 @@ public interface CourseSettingsReader extends CanvasReader<CourseSettings, Cours
      * @return The course settings from Canvas
      * @throws IOException When there is an error communicating with Canvas
      */
-    Optional<CourseSettings> getCourseSettings(String courseId) throws IOException, URISyntaxException, ParseException;
+    Optional<CourseSettings> getCourseSettings(String courseId) throws IOException;
 }

@@ -1,14 +1,12 @@
 package edu.ksu.canvas.interfaces;
 
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
 
 import edu.ksu.canvas.model.Conversation;
 import edu.ksu.canvas.requestOptions.AddMessageToConversationOptions;
 import edu.ksu.canvas.requestOptions.CreateConversationOptions;
-import org.apache.hc.core5.http.ParseException;
 
 public interface ConversationWriter extends CanvasWriter<Conversation, ConversationWriter> {
 
@@ -24,14 +22,14 @@ public interface ConversationWriter extends CanvasWriter<Conversation, Conversat
      * @return List of conversations created
      * @throws IOException if an error happens while communicating with Canvas
      */
-    public List<Conversation> createConversation(CreateConversationOptions options) throws IOException, URISyntaxException, ParseException;
+    public List<Conversation> createConversation(CreateConversationOptions options) throws IOException;
 
     /**
      * Marks all conversations for the current user as read.
      * There is no return from Canvas. If there is no error, we must assume it succeeded.
      * @throws IOException if there is an error communicating with Canvas
      */
-    public void markAllConversationsRead() throws IOException, URISyntaxException, ParseException;
+    public void markAllConversationsRead() throws IOException;
 
     /**
      * Modify a conversation in Canvas. Only some fields are mutable:
@@ -41,7 +39,7 @@ public interface ConversationWriter extends CanvasWriter<Conversation, Conversat
      * @return The modified conversation object
      * @throws IOException if there is an error communicating with Canvas
      */
-    public Optional<Conversation> editConversation(Conversation conversation) throws IOException, URISyntaxException, ParseException;
+    public Optional<Conversation> editConversation(Conversation conversation) throws IOException;
 
     /**
      * Add a message to an existing conversation. The returned Conversation object will only
@@ -50,5 +48,5 @@ public interface ConversationWriter extends CanvasWriter<Conversation, Conversat
      * @return Conversation object with only the added message in it
      * @throws IOException if there is an error communicating with Canvas
      */
-    public Optional<Conversation> addMessage(AddMessageToConversationOptions options) throws IOException, URISyntaxException, ParseException;
+    public Optional<Conversation> addMessage(AddMessageToConversationOptions options) throws IOException;
 }

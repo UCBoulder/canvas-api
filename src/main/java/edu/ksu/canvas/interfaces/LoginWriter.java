@@ -1,11 +1,9 @@
 package edu.ksu.canvas.interfaces;
 
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.Optional;
 
 import edu.ksu.canvas.model.Login;
-import org.apache.hc.core5.http.ParseException;
 
 public interface LoginWriter extends CanvasWriter<Login, LoginWriter> {
 
@@ -15,7 +13,7 @@ public interface LoginWriter extends CanvasWriter<Login, LoginWriter> {
      * @return The modified login object if update was successful
      * @throws IOException When there is an error communicating with Canvas
      */
-    Optional<Login> updateLogin(Login login) throws IOException, URISyntaxException, ParseException;
+    Optional<Login> updateLogin(Login login) throws IOException;
 
     /**
      * Delete a login from Canvas
@@ -23,5 +21,5 @@ public interface LoginWriter extends CanvasWriter<Login, LoginWriter> {
      * @return The now deleted login record
      * @throws IOException When there is an error communicating with Canvas
      */
-    Optional<Login> deleteLogin(Login login) throws IOException, URISyntaxException, ParseException;
+    Optional<Login> deleteLogin(Login login) throws IOException;
 }

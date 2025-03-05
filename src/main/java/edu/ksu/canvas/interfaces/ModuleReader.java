@@ -2,10 +2,8 @@ package edu.ksu.canvas.interfaces;
 
 import edu.ksu.canvas.model.Module;
 import edu.ksu.canvas.requestOptions.ListModulesOptions;
-import org.apache.hc.core5.http.ParseException;
 
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.List;
 
 public interface ModuleReader extends CanvasReader<Module, ModuleReader> {
@@ -16,6 +14,6 @@ public interface ModuleReader extends CanvasReader<Module, ModuleReader> {
      * @return List of the course's modules
      * @throws IOException When there is an error communicating with Canvas
      */
-    public List<Module> getModulesInCourse(ListModulesOptions options) throws IOException, URISyntaxException, ParseException;
+    public List<Module> getModulesInCourse(ListModulesOptions options) throws IOException;
 
 }

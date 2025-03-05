@@ -4,10 +4,8 @@ package edu.ksu.canvas.interfaces;
 import edu.ksu.canvas.model.Progress;
 import edu.ksu.canvas.model.assignment.Submission;
 import edu.ksu.canvas.requestOptions.MultipleSubmissionsOptions;
-import org.apache.hc.core5.http.ParseException;
 
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.Optional;
 
 public interface SubmissionWriter extends CanvasWriter<Submission, SubmissionWriter> {
@@ -20,7 +18,7 @@ public interface SubmissionWriter extends CanvasWriter<Submission, SubmissionWri
      * @return             The progress object created by Canvas
      * @throws             IOException If there is an error talking to Canvas
      */
-    Optional<Progress> gradeMultipleSubmissionsBySection(MultipleSubmissionsOptions options)throws IOException, URISyntaxException, ParseException;
+    Optional<Progress> gradeMultipleSubmissionsBySection(MultipleSubmissionsOptions options)throws IOException;
 
     /**
      * Update the grading and comments on multiple student's assignment submissions in an asynchronous job. By Course.
@@ -30,5 +28,5 @@ public interface SubmissionWriter extends CanvasWriter<Submission, SubmissionWri
      * @return             The progress object created by Canvas
      * @throws             IOException If there is an error talking to Canvas
      */
-    public Optional<Progress> gradeMultipleSubmissionsByCourse(MultipleSubmissionsOptions options) throws IOException, URISyntaxException, ParseException;
+    public Optional<Progress> gradeMultipleSubmissionsByCourse(MultipleSubmissionsOptions options) throws IOException;
 }

@@ -7,13 +7,11 @@ import edu.ksu.canvas.model.assignment.Quiz;
 import edu.ksu.canvas.net.Response;
 import edu.ksu.canvas.net.RestClient;
 import edu.ksu.canvas.oauth.OauthToken;
-import org.apache.hc.core5.http.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
-import java.net.URISyntaxException;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -30,7 +28,7 @@ public class QuizImpl extends BaseImpl<Quiz, QuizReader, QuizWriter> implements 
     }
 
     @Override
-    public Optional<Quiz> getSingleQuiz(String courseId, String quizId) throws IOException, URISyntaxException, ParseException {
+    public Optional<Quiz> getSingleQuiz(String courseId, String quizId) throws IOException {
         LOG.debug("Retrieving single quiz {} in course {}", quizId, courseId);
         String url = buildCanvasUrl("courses/" + courseId + "/quizzes/" + quizId, Collections.emptyMap());
         Response response = canvasMessenger.getSingleResponseFromCanvas(oauthToken, url);
@@ -38,7 +36,7 @@ public class QuizImpl extends BaseImpl<Quiz, QuizReader, QuizWriter> implements 
     }
 
     @Override
-    public List<Quiz> getQuizzesInCourse(String courseId) throws IOException, URISyntaxException, ParseException {
+    public List<Quiz> getQuizzesInCourse(String courseId) throws IOException {
         LOG.debug("Getting quizzes for course {}", courseId);
         String url = buildCanvasUrl("courses/" + courseId + "/quizzes", Collections.emptyMap());
         List<Response> responses = canvasMessenger.getFromCanvas(oauthToken, url);
@@ -46,7 +44,7 @@ public class QuizImpl extends BaseImpl<Quiz, QuizReader, QuizWriter> implements 
     }
 
     @Override
-    public Optional<Quiz> updateQuiz(Quiz quiz, String courseId) throws IOException, URISyntaxException, ParseException {
+    public Optional<Quiz> updateQuiz(Quiz quiz, String courseId) throws IOException {
         LOG.debug("Updating quiz {} in course {}", quiz.getId(), courseId);
         String url = buildCanvasUrl("courses/" + courseId + "/quizzes/" + quiz.getId(), Collections.emptyMap());
         Response response = canvasMessenger.sendJsonPutToCanvas(oauthToken, url,quiz.toJsonObject(serializeNulls));

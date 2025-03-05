@@ -1,11 +1,9 @@
 package edu.ksu.canvas.interfaces;
 
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.Optional;
 
 import edu.ksu.canvas.model.ExternalTool;
-import org.apache.hc.core5.http.ParseException;
 
 public interface ExternalToolWriter extends CanvasWriter<ExternalTool, ExternalToolWriter>{
 
@@ -16,7 +14,7 @@ public interface ExternalToolWriter extends CanvasWriter<ExternalTool, ExternalT
      * @return The newly created external tool with the Canvas assigned ID
      * @throws IOException if there is an error communicating with Canvas
      */
-    public Optional<ExternalTool> createExternalToolInCourse(String courseId, ExternalTool tool) throws IOException, URISyntaxException, ParseException;
+    public Optional<ExternalTool> createExternalToolInCourse(String courseId, ExternalTool tool) throws IOException;
 
     /**
      * Create an External tool in the specified Canvas account
@@ -25,7 +23,7 @@ public interface ExternalToolWriter extends CanvasWriter<ExternalTool, ExternalT
      * @return The newly created external tool with the Canvas assigned ID
      * @throws IOException if there is an error communicating with Canvas
      */
-    public Optional<ExternalTool> createExternalToolInAccount(String accountId, ExternalTool tool) throws IOException, URISyntaxException, ParseException;
+    public Optional<ExternalTool> createExternalToolInAccount(String accountId, ExternalTool tool) throws IOException;
 
     /**
      * Modify the settings of an external tool associated with a course
@@ -34,7 +32,7 @@ public interface ExternalToolWriter extends CanvasWriter<ExternalTool, ExternalT
      * @return The updated tool object
      * @throws IOException if there is an error communicating with Canvas
      */
-    public Optional<ExternalTool> editExternalToolInCourse(String courseId, ExternalTool tool) throws IOException, URISyntaxException, ParseException;
+    public Optional<ExternalTool> editExternalToolInCourse(String courseId, ExternalTool tool) throws IOException;
 
     /**
      * Modify the settings of an external tool associated with an account
@@ -43,7 +41,7 @@ public interface ExternalToolWriter extends CanvasWriter<ExternalTool, ExternalT
      * @return The updated tool object
      * @throws IOException if there is an error communicating with Canvas
      */
-    public Optional<ExternalTool> editExternalToolInAccount(String accountId, ExternalTool tool) throws IOException, URISyntaxException, ParseException;
+    public Optional<ExternalTool> editExternalToolInAccount(String accountId, ExternalTool tool) throws IOException;
 
     /**
      * Delete an external tool from a course.
@@ -52,7 +50,7 @@ public interface ExternalToolWriter extends CanvasWriter<ExternalTool, ExternalT
      * @return The deleted tool. Should have a workflow state of "deleted"
      * @throws IOException if there is an error communicating with Canvas
      */
-    public Optional<ExternalTool> deleteExternalToolInCourse(String courseId, Long toolId) throws IOException, URISyntaxException, ParseException;
+    public Optional<ExternalTool> deleteExternalToolInCourse(String courseId, Long toolId) throws IOException;
 
     /**
      * Delete an external tool from an account.
@@ -61,5 +59,5 @@ public interface ExternalToolWriter extends CanvasWriter<ExternalTool, ExternalT
      * @return The deleted tool. Should have a workflow state of "deleted"
      * @throws IOException if there is an error communicating with Canvas
      */
-    public Optional<ExternalTool> deleteExternalToolInAccount(String accountId, Long toolId) throws IOException, URISyntaxException, ParseException;
+    public Optional<ExternalTool> deleteExternalToolInAccount(String accountId, Long toolId) throws IOException;
 }

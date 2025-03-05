@@ -1,12 +1,10 @@
 package edu.ksu.canvas.interfaces;
 
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.Optional;
 
 import edu.ksu.canvas.model.CommunicationChannel;
 import edu.ksu.canvas.requestOptions.CreateCommunicationChannelOptions;
-import org.apache.hc.core5.http.ParseException;
 
 public interface CommunicationChannelWriter extends CanvasWriter<CommunicationChannel, CommunicationChannelWriter> {
 
@@ -16,7 +14,7 @@ public interface CommunicationChannelWriter extends CanvasWriter<CommunicationCh
      * @return The created communication channel object if creation was successful
      * @throws IOException When there is an error communicating with Canvas
      */
-    Optional<CommunicationChannel> createCommunicationChannel(CreateCommunicationChannelOptions options) throws IOException, URISyntaxException, ParseException;
+    Optional<CommunicationChannel> createCommunicationChannel(CreateCommunicationChannelOptions options) throws IOException;
 
     /**
      * Delete a communication channel from Canvas
@@ -24,5 +22,5 @@ public interface CommunicationChannelWriter extends CanvasWriter<CommunicationCh
      * @return The now deleted communication channel record
      * @throws IOException When there is an error communicating with Canvas
      */
-    Optional<CommunicationChannel> deleteCommunicationChannel(CommunicationChannel cc) throws IOException, URISyntaxException, ParseException;
+    Optional<CommunicationChannel> deleteCommunicationChannel(CommunicationChannel cc) throws IOException;
 }

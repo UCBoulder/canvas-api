@@ -9,7 +9,6 @@ import org.apache.hc.core5.http.HttpEntity;
 import org.apache.hc.client5.http.classic.methods.HttpPost;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
 import org.apache.hc.client5.http.impl.classic.HttpClientBuilder;
-import org.apache.hc.core5.http.ParseException;
 import org.apache.hc.core5.http.io.entity.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,7 +33,7 @@ public class OauthTokenRefresher implements Serializable {
         this.canvasUrl = canvasUrl;
     }
 
-    public TokenRefreshResponse getNewToken(String refreshToken) throws IOException, ParseException {
+    public TokenRefreshResponse getNewToken(String refreshToken) throws IOException {
         LOG.debug("Getting a fresh OAuth access token");
         ConnectionConfig connConfig = ConnectionConfig.custom()
             .setConnectTimeout(TIMEOUT_SECONDS*1000, TimeUnit.MILLISECONDS)

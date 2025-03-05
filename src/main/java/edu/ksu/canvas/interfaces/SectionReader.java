@@ -2,10 +2,8 @@ package edu.ksu.canvas.interfaces;
 
 import edu.ksu.canvas.enums.SectionIncludes;
 import edu.ksu.canvas.model.Section;
-import org.apache.hc.core5.http.ParseException;
 
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
 /**
@@ -20,7 +18,7 @@ public interface SectionReader extends CanvasReader<Section, SectionReader> {
      * @return List of sections
      * @throws IOException When there is an error communicating with Canvas
      */
-     List<Section> listCourseSections(String courseId, List<SectionIncludes> includes) throws IOException, URISyntaxException, ParseException;
+     List<Section> listCourseSections(String courseId, List<SectionIncludes> includes) throws IOException;
 
     /**
      * Return a single section with a given section ID
@@ -28,6 +26,6 @@ public interface SectionReader extends CanvasReader<Section, SectionReader> {
      * @return The section
      * @throws IOException When there is an error communicating with Canvas
      */
-     Optional<Section> getSingleSection(String sectionId) throws IOException, URISyntaxException, ParseException;
+     Optional<Section> getSingleSection(String sectionId) throws IOException;
 
 }

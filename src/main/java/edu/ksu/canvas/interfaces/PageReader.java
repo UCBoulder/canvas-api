@@ -1,12 +1,10 @@
 package edu.ksu.canvas.interfaces;
 
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
 
 import edu.ksu.canvas.model.Page;
-import org.apache.hc.core5.http.ParseException;
 
 public interface PageReader extends CanvasReader<Page, PageReader> {
 
@@ -17,7 +15,7 @@ public interface PageReader extends CanvasReader<Page, PageReader> {
      * @return The requested Page object
      * @throws IOException When there is an error communicating with Canvas
      */
-    public Optional<Page> getCoursePage(String courseId, String pageUrl) throws IOException, URISyntaxException, ParseException;
+    public Optional<Page> getCoursePage(String courseId, String pageUrl) throws IOException;
 
     /**
      * Retrieve a specified page associated with a group.
@@ -26,7 +24,7 @@ public interface PageReader extends CanvasReader<Page, PageReader> {
      * @return The requested Page object
      * @throws IOException When there is an error communicating with Canvas
      */
-    public Optional<Page> getGroupPage(String groupId, String pageUrl) throws IOException, URISyntaxException, ParseException;
+    public Optional<Page> getGroupPage(String groupId, String pageUrl) throws IOException;
 
     /**
      * Get a list of pages in a course.
@@ -36,7 +34,7 @@ public interface PageReader extends CanvasReader<Page, PageReader> {
      * @return List of Page objects (without a body)
      * @throws IOException When there is an error communicating with Canvas
      */
-    public List<Page> listPagesInCourse(String courseId) throws IOException, URISyntaxException, ParseException;
+    public List<Page> listPagesInCourse(String courseId) throws IOException;
 
     /**
      * Get a list of pages in a group.
@@ -46,5 +44,5 @@ public interface PageReader extends CanvasReader<Page, PageReader> {
      * @return List of Page objects (without a body)
      * @throws IOException When there is an error communicating with Canvas
      */
-    public List<Page> listPagesInGroup(String groupId) throws IOException, URISyntaxException, ParseException;
+    public List<Page> listPagesInGroup(String groupId) throws IOException;
 }

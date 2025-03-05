@@ -2,10 +2,8 @@ package edu.ksu.canvas.interfaces;
 
 import edu.ksu.canvas.model.SelectiveData;
 import edu.ksu.canvas.requestOptions.GetSelectiveDataOptions;
-import org.apache.hc.core5.http.ParseException;
 
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.List;
 
 public interface SelectiveDataReader extends CanvasReader<SelectiveData, SelectiveDataReader> {
@@ -15,7 +13,7 @@ public interface SelectiveDataReader extends CanvasReader<SelectiveData, Selecti
      * @return List of selectable items for the migration
      * @throws IOException When there is an error communicating with Canvas
      */
-    List<SelectiveData> getCourseSelectiveDataFromMigration(GetSelectiveDataOptions options) throws IOException, URISyntaxException, ParseException;
+    List<SelectiveData> getCourseSelectiveDataFromMigration(GetSelectiveDataOptions options) throws IOException;
 
     /**
      * Get selective data of a user migration.
@@ -23,7 +21,7 @@ public interface SelectiveDataReader extends CanvasReader<SelectiveData, Selecti
      * @return List of selectable items for the migration
      * @throws IOException When there is an error communicating with Canvas
      */
-    List<SelectiveData> getUserSelectiveDataFromMigration(GetSelectiveDataOptions options) throws IOException, URISyntaxException, ParseException;
+    List<SelectiveData> getUserSelectiveDataFromMigration(GetSelectiveDataOptions options) throws IOException;
 
     /**
      * Get selective data of a group migration.
@@ -31,7 +29,7 @@ public interface SelectiveDataReader extends CanvasReader<SelectiveData, Selecti
      * @return List of selectable items for the migration
      * @throws IOException When there is an error communicating with Canvas
      */
-    List<SelectiveData> getGroupSelectiveDataFromMigration(GetSelectiveDataOptions options) throws IOException, URISyntaxException, ParseException;
+    List<SelectiveData> getGroupSelectiveDataFromMigration(GetSelectiveDataOptions options) throws IOException;
 
     /**
      * Get selective data of an account migration.
@@ -39,5 +37,5 @@ public interface SelectiveDataReader extends CanvasReader<SelectiveData, Selecti
      * @return List of selectable items for the migration
      * @throws IOException When there is an error communicating with Canvas
      */
-    List<SelectiveData> getAccountSelectiveDataFromMigration(GetSelectiveDataOptions options) throws IOException, URISyntaxException, ParseException;
+    List<SelectiveData> getAccountSelectiveDataFromMigration(GetSelectiveDataOptions options) throws IOException;
 }

@@ -7,18 +7,15 @@ import edu.ksu.canvas.model.CalendarEvent;
 import edu.ksu.canvas.net.FakeRestClient;
 import edu.ksu.canvas.requestOptions.DeleteCalendarEventOptions;
 
-import org.apache.hc.core5.http.ParseException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.time.Instant;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class CalendarWriterUTest extends CanvasTestBase {
@@ -33,7 +30,7 @@ class CalendarWriterUTest extends CanvasTestBase {
     }
 
     @Test
-    void testAddCalendarEvent() throws IOException, URISyntaxException, ParseException {
+    void testAddCalendarEvent() throws IOException {
         String url = baseUrl + "/api/v1/calendar_events";
         fakeRestClient.addSuccessResponse(url, "SampleJson/calendar/CreateCalendarEvent.json");
         CalendarEvent event = new CalendarEvent();
@@ -60,7 +57,7 @@ class CalendarWriterUTest extends CanvasTestBase {
     }
 
     @Test
-    void testEditCalendarEvent() throws IOException, URISyntaxException, ParseException {
+    void testEditCalendarEvent() throws IOException {
         String url = baseUrl + "/api/v1/calendar_events/1";
         fakeRestClient.addSuccessResponse(url, "SampleJson/calendar/EditCalendarEvent.json");
         CalendarEvent event = new CalendarEvent();
@@ -72,7 +69,7 @@ class CalendarWriterUTest extends CanvasTestBase {
     }
 
     @Test
-    void testDeleteCalendarEvent() throws IOException, URISyntaxException, ParseException {
+    void testDeleteCalendarEvent() throws IOException {
         String url = baseUrl + "/api/v1/calendar_events/1";
         fakeRestClient.addSuccessResponse(url, "SampleJson/calendar/DeleteCalendarEvent.json");
         Optional <CalendarEvent> deleteEventOpt =

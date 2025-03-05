@@ -2,14 +2,12 @@ package edu.ksu.canvas.net;
 
 import edu.ksu.canvas.exception.InvalidOauthTokenException;
 import edu.ksu.canvas.oauth.OauthToken;
-import org.apache.hc.core5.http.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.validation.constraints.NotNull;
 import java.io.InputStream;
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Map;
 
@@ -25,7 +23,7 @@ public class RefreshingRestClient implements RestClient {
     private RestClient restClient = new SimpleRestClient();
 
     @Override
-    public Response sendApiGet(@NotNull OauthToken token, @NotNull String url, int connectTimeout, int readTimeout) throws IOException, URISyntaxException, ParseException {
+    public Response sendApiGet(@NotNull OauthToken token, @NotNull String url, int connectTimeout, int readTimeout) throws IOException {
         try {
             return restClient.sendApiGet(token, url, connectTimeout, readTimeout);
         } catch (InvalidOauthTokenException e) {
@@ -36,7 +34,7 @@ public class RefreshingRestClient implements RestClient {
     }
 
     @Override
-    public Response sendJsonPost(@NotNull OauthToken token, @NotNull String url, String json, int connectTimeout, int readTimeout) throws IOException, URISyntaxException, ParseException {
+    public Response sendJsonPost(@NotNull OauthToken token, @NotNull String url, String json, int connectTimeout, int readTimeout) throws IOException {
         try {
             return restClient.sendJsonPost(token, url, json, connectTimeout, readTimeout);
         } catch (InvalidOauthTokenException e) {
@@ -47,7 +45,7 @@ public class RefreshingRestClient implements RestClient {
     }
 
     @Override
-    public Response sendJsonPut(@NotNull OauthToken token, @NotNull String url, String json, int connectTimeout, int readTimeout) throws IOException, URISyntaxException, ParseException {
+    public Response sendJsonPut(@NotNull OauthToken token, @NotNull String url, String json, int connectTimeout, int readTimeout) throws IOException {
         try {
             return restClient.sendJsonPut(token, url, json, connectTimeout, readTimeout);
         } catch (InvalidOauthTokenException e) {
@@ -58,7 +56,7 @@ public class RefreshingRestClient implements RestClient {
     }
 
     @Override
-    public Response sendApiPost(@NotNull OauthToken token, @NotNull String url, Map<String, List<String>> postParameters, int connectTimeout, int readTimeout) throws InvalidOauthTokenException, IOException, URISyntaxException, ParseException {
+    public Response sendApiPost(@NotNull OauthToken token, @NotNull String url, Map<String, List<String>> postParameters, int connectTimeout, int readTimeout) throws InvalidOauthTokenException, IOException {
         try {
             return restClient.sendApiPost(token, url, postParameters, connectTimeout, readTimeout);
         } catch (InvalidOauthTokenException e) {
@@ -69,7 +67,7 @@ public class RefreshingRestClient implements RestClient {
     }
 
     @Override
-    public Response sendApiPostFile(@NotNull OauthToken token, @NotNull String url, Map<String, List<String>> postParameters, String fileParameter, String filePath, InputStream is, int connectTimeout, int readTimeout) throws InvalidOauthTokenException, IOException, URISyntaxException, ParseException {
+    public Response sendApiPostFile(@NotNull OauthToken token, @NotNull String url, Map<String, List<String>> postParameters, String fileParameter, String filePath, InputStream is, int connectTimeout, int readTimeout) throws InvalidOauthTokenException, IOException {
         try {
             return restClient.sendApiPostFile(token, url, postParameters, fileParameter, filePath, is, connectTimeout, readTimeout);
         } catch (InvalidOauthTokenException e) {
@@ -80,7 +78,7 @@ public class RefreshingRestClient implements RestClient {
     }
 
     @Override
-    public Response sendApiDelete(@NotNull OauthToken token, @NotNull String url, Map<String, List<String>> deleteParameters, int connectTimeout, int readTimeout) throws InvalidOauthTokenException, IOException, URISyntaxException, ParseException {
+    public Response sendApiDelete(@NotNull OauthToken token, @NotNull String url, Map<String, List<String>> deleteParameters, int connectTimeout, int readTimeout) throws InvalidOauthTokenException, IOException {
         try {
             return restClient.sendApiDelete(token, url, deleteParameters, connectTimeout, readTimeout);
         } catch (InvalidOauthTokenException e) {
@@ -91,7 +89,7 @@ public class RefreshingRestClient implements RestClient {
     }
 
     @Override
-    public Response sendApiPut(@NotNull OauthToken token, @NotNull String url, Map<String, List<String>> putParameters, int connectTimeout, int readTimeout) throws InvalidOauthTokenException, IOException, URISyntaxException, ParseException {
+    public Response sendApiPut(@NotNull OauthToken token, @NotNull String url, Map<String, List<String>> putParameters, int connectTimeout, int readTimeout) throws InvalidOauthTokenException, IOException {
         try {
             return restClient.sendApiPut(token, url, putParameters, connectTimeout, readTimeout);
         } catch (InvalidOauthTokenException e) {
@@ -102,7 +100,7 @@ public class RefreshingRestClient implements RestClient {
     }
 
     @Override
-    public String sendUpload(String uploadUrl, Map<String, List<String>> params, InputStream in, String filename, int connectTimeout, int readTimeout) throws IOException, URISyntaxException, ParseException {
+    public String sendUpload(String uploadUrl, Map<String, List<String>> params, InputStream in, String filename, int connectTimeout, int readTimeout) throws IOException {
         return restClient.sendUpload(uploadUrl, params, in, filename, connectTimeout, readTimeout);
     }
 }

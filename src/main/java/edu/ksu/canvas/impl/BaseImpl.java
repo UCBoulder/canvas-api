@@ -14,13 +14,11 @@ import edu.ksu.canvas.oauth.OauthToken;
 import edu.ksu.canvas.util.CanvasURLBuilder;
 import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.hc.core5.http.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
-import java.net.URISyntaxException;
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
@@ -66,7 +64,7 @@ public abstract class BaseImpl<T, READERTYPE extends CanvasReader, WRITERTYPE ex
         canvasMessenger = new RestCanvasMessenger(connectTimeout, readTimeout, restClient);
     }
 
-    protected Optional<T> getFromCanvas(String url) throws IOException, URISyntaxException, ParseException {
+    protected Optional<T> getFromCanvas(String url) throws IOException {
         Response response = canvasMessenger.getSingleResponseFromCanvas(oauthToken, url);
         if (response.getErrorHappened() || response.getResponseCode() != 200) {
             LOG.warn("Error {} on GET from url {}", response.getResponseCode(), url);
@@ -75,7 +73,7 @@ public abstract class BaseImpl<T, READERTYPE extends CanvasReader, WRITERTYPE ex
         return responseParser.parseToObject(objectType(), response);
     }
 
-    protected List<T> getListFromCanvas(String url) throws IOException, URISyntaxException, ParseException {
+    protected List<T> getListFromCanvas(String url) throws IOException {
         Consumer<Response> consumer = null;
         if (responseCallback != null) {
             consumer = response -> responseCallback.accept(responseParser.parseToList(listType(), response));

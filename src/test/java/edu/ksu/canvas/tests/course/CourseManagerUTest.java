@@ -6,13 +6,11 @@ import edu.ksu.canvas.interfaces.CourseWriter;
 import edu.ksu.canvas.model.Course;
 import edu.ksu.canvas.net.FakeRestClient;
 import edu.ksu.canvas.requestOptions.DeleteCourseOptions;
-import org.apache.hc.core5.http.ParseException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -35,7 +33,7 @@ class CourseManagerUTest extends CanvasTestBase {
     }
 
     @Test
-    void testCourseCreation() throws IOException, URISyntaxException, ParseException {
+    void testCourseCreation() throws IOException {
         Course newCourse = new Course();
         newCourse.setCourseCode("SeleniumTestCourseCode");
         newCourse.setName("SeleniumTestCourse");
@@ -47,7 +45,7 @@ class CourseManagerUTest extends CanvasTestBase {
     }
 
     @Test
-    void testCourseUpdate() throws IOException, URISyntaxException, ParseException {
+    void testCourseUpdate() throws IOException {
         Course newCourse = new Course();
         newCourse.setId(new Long(ARBITRARY_COURSE_ID));
         newCourse.setCourseCode("UpdatedSeleniumTestCourseCode");
@@ -60,7 +58,7 @@ class CourseManagerUTest extends CanvasTestBase {
     }
 
     @Test
-    void testCourseUpdateWithId() throws IOException, URISyntaxException, ParseException {
+    void testCourseUpdateWithId() throws IOException {
         Course newCourse = new Course();
         newCourse.setId(new Long(ARBITRARY_COURSE_ID));
         newCourse.setCourseCode("UpdatedSeleniumTestCourseCode");
@@ -73,7 +71,7 @@ class CourseManagerUTest extends CanvasTestBase {
     }
 
     @Test
-    void testCourseUpdateWithBadCharacters() throws IOException, URISyntaxException, ParseException {
+    void testCourseUpdateWithBadCharacters() throws IOException {
         Course newCourse = new Course();
         newCourse.setId(new Long(ARBITRARY_COURSE_ID));
         newCourse.setCourseCode("UpdatedSeleniumTestCourseCode");
@@ -86,7 +84,7 @@ class CourseManagerUTest extends CanvasTestBase {
     }
 
     @Test
-    void testCourseDeletion() throws IOException, URISyntaxException, ParseException {
+    void testCourseDeletion() throws IOException {
         String url = baseUrl + "/api/v1/courses/" + ARBITRARY_COURSE_ID;
         fakeRestClient.addSuccessResponse(url, "SampleJson/course/DeleteCourseSuccess.json");
         Boolean deleted = courseWriter.deleteCourse(ARBITRARY_COURSE_ID);
@@ -94,7 +92,7 @@ class CourseManagerUTest extends CanvasTestBase {
     }
 
     @Test
-    void testCourseDeletion_withOptions() throws IOException, URISyntaxException, ParseException {
+    void testCourseDeletion_withOptions() throws IOException {
         String url = baseUrl + "/api/v1/courses/" + ARBITRARY_COURSE_ID;
         fakeRestClient.addSuccessResponse(url, "SampleJson/course/DeleteCourseSuccess.json");
         DeleteCourseOptions options = new DeleteCourseOptions(ARBITRARY_COURSE_ID,
@@ -104,7 +102,7 @@ class CourseManagerUTest extends CanvasTestBase {
     }
 
     @Test
-    void testCourseConclusion() throws IOException, URISyntaxException, ParseException {
+    void testCourseConclusion() throws IOException {
         String url = baseUrl + "/api/v1/courses/" + ARBITRARY_COURSE_ID;
         fakeRestClient.addSuccessResponse(url, "SampleJson/course/DeleteConcludeCourseSuccess.json");
         DeleteCourseOptions options = new DeleteCourseOptions(ARBITRARY_COURSE_ID,
@@ -114,7 +112,7 @@ class CourseManagerUTest extends CanvasTestBase {
     }
 
     @Test
-    void testSisUserMasqueradeCourseCreation() throws IOException, URISyntaxException, ParseException {
+    void testSisUserMasqueradeCourseCreation() throws IOException {
         Course newCourse = new Course();
         newCourse.setCourseCode("SeleniumTestCourseCode");
         newCourse.setName("SeleniumTestCourse");
@@ -127,7 +125,7 @@ class CourseManagerUTest extends CanvasTestBase {
     }
 
     @Test
-    void testSisUserMasqueradeCourseDeletion() throws IOException, URISyntaxException, ParseException {
+    void testSisUserMasqueradeCourseDeletion() throws IOException {
         String url = baseUrl + "/api/v1/courses/" + ARBITRARY_COURSE_ID +"?as_user_id=sis_user_id:" + ARBITRARY_USER_ID;
         fakeRestClient.addSuccessResponse(url, "SampleJson/course/DeleteCourseSuccess.json");
         Boolean deleted = courseWriter.writeAsSisUser(ARBITRARY_USER_ID).deleteCourse(ARBITRARY_COURSE_ID);
@@ -135,7 +133,7 @@ class CourseManagerUTest extends CanvasTestBase {
     }
 
     @Test
-    void testCanvasUserMasqueradeCourseCreation() throws IOException, URISyntaxException, ParseException {
+    void testCanvasUserMasqueradeCourseCreation() throws IOException {
         Course newCourse = new Course();
         newCourse.setCourseCode("SeleniumTestCourseCode");
         newCourse.setName("SeleniumTestCourse");
@@ -147,7 +145,7 @@ class CourseManagerUTest extends CanvasTestBase {
     }
 
     @Test
-    void testCanvasUserMasqueradeCourseDeletion() throws IOException, URISyntaxException, ParseException {
+    void testCanvasUserMasqueradeCourseDeletion() throws IOException {
         String url = baseUrl + "/api/v1/courses/" + ARBITRARY_COURSE_ID + "?as_user_id=" + ARBITRARY_USER_ID;
         System.out.println("putting URL in face client: " + url);
         fakeRestClient.addSuccessResponse(url, "SampleJson/course/DeleteCourseSuccess.json");

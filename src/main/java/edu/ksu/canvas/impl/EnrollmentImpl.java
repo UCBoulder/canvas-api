@@ -2,7 +2,6 @@ package edu.ksu.canvas.impl;
 
 import com.google.gson.reflect.TypeToken;
 
-import edu.ksu.canvas.interfaces.CourseReader;
 import edu.ksu.canvas.interfaces.EnrollmentReader;
 import edu.ksu.canvas.interfaces.EnrollmentWriter;
 import edu.ksu.canvas.model.Enrollment;
@@ -13,13 +12,11 @@ import edu.ksu.canvas.requestOptions.GetEnrollmentOptions;
 
 import edu.ksu.canvas.requestOptions.UnEnrollOptions;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.hc.core5.http.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
-import java.net.URISyntaxException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -36,21 +33,21 @@ public class EnrollmentImpl extends BaseImpl<Enrollment, EnrollmentReader, Enrol
     }
 
     @Override
-    public List<Enrollment> getUserEnrollments(GetEnrollmentOptions options) throws IOException, URISyntaxException, ParseException {
+    public List<Enrollment> getUserEnrollments(GetEnrollmentOptions options) throws IOException {
         LOG.debug("Retrieving user enrollments for user {}", options.getObjectId());
         String url = buildCanvasUrl("users/" + options.getObjectId() + "/enrollments", options.getOptionsMap());
         return getListFromCanvas(url);
     }
 
     @Override
-    public List<Enrollment> getSectionEnrollments(GetEnrollmentOptions options) throws IOException, URISyntaxException, ParseException {
+    public List<Enrollment> getSectionEnrollments(GetEnrollmentOptions options) throws IOException {
         LOG.debug("Retrieving section enrollments for section {}", options.getObjectId());
         String url = buildCanvasUrl("sections/" + options.getObjectId() + "/enrollments", options.getOptionsMap());
         return getListFromCanvas(url);
     }
 
     @Override
-    public List<Enrollment> getCourseEnrollments(GetEnrollmentOptions options) throws IOException, URISyntaxException, ParseException {
+    public List<Enrollment> getCourseEnrollments(GetEnrollmentOptions options) throws IOException {
         LOG.debug("Retrieving course enrollments for course {}", options.getObjectId());
         String url = buildCanvasUrl("courses/" + options.getObjectId() + "/enrollments", options.getOptionsMap());
         return getListFromCanvas(url);
@@ -58,7 +55,7 @@ public class EnrollmentImpl extends BaseImpl<Enrollment, EnrollmentReader, Enrol
 
     @Override
     @Deprecated
-    public Optional<Enrollment> enrollUser(Enrollment enrollment) throws IOException, URISyntaxException, ParseException {
+    public Optional<Enrollment> enrollUser(Enrollment enrollment) throws IOException {
         if (enrollment.getCourseId() == null || enrollment.getCourseId() == 0) {
             throw new IllegalArgumentException("Required CourseId in enrollment was not found.");
         }
@@ -66,7 +63,7 @@ public class EnrollmentImpl extends BaseImpl<Enrollment, EnrollmentReader, Enrol
     }
 
     @Override
-    public Optional<Enrollment> enrollUserInCourse(Enrollment enrollment) throws IOException, URISyntaxException, ParseException {
+    public Optional<Enrollment> enrollUserInCourse(Enrollment enrollment) throws IOException {
         if (enrollment.getCourseId() == null || enrollment.getCourseId() == 0) {
             throw new IllegalArgumentException("Required CourseId in enrollment was not found.");
         }
@@ -75,7 +72,7 @@ public class EnrollmentImpl extends BaseImpl<Enrollment, EnrollmentReader, Enrol
     }
 
     @Override
-    public Optional<Enrollment> enrollUserInSection(Enrollment enrollment) throws IOException, URISyntaxException, ParseException {
+    public Optional<Enrollment> enrollUserInSection(Enrollment enrollment) throws IOException {
         if (StringUtils.isBlank(enrollment.getCourseSectionId())) {
             throw new IllegalArgumentException("Required CourseSectionId in enrollment was not found.");
         }
@@ -84,12 +81,12 @@ public class EnrollmentImpl extends BaseImpl<Enrollment, EnrollmentReader, Enrol
     }
 
     @Override
-    public Optional<Enrollment> dropUser(String courseId, String enrollmentId) throws IOException, URISyntaxException, ParseException {
+    public Optional<Enrollment> dropUser(String courseId, String enrollmentId) throws IOException {
         return dropUser(courseId, enrollmentId, UnEnrollOptions.DELETE);
     }
 
     @Override
-    public Optional<Enrollment> dropUser(String courseId, String enrollmentId, UnEnrollOptions unEnrollOption) throws IOException, URISyntaxException, ParseException {
+    public Optional<Enrollment> dropUser(String courseId, String enrollmentId, UnEnrollOptions unEnrollOption) throws IOException {
         LOG.debug("Removing enrollment {} from course {}", enrollmentId, courseId);
         Map<String, List<String>> postParams = new HashMap<>();
         postParams.put("task", Collections.singletonList(unEnrollOption.toString()));
@@ -102,7 +99,7 @@ public class EnrollmentImpl extends BaseImpl<Enrollment, EnrollmentReader, Enrol
         return responseParser.parseToObject(Enrollment.class, response);
     }
 
-    private Optional<Enrollment> enrollUser(Enrollment enrollment, boolean isSectionEnrollment) throws IOException, URISyntaxException, ParseException {
+    private Optional<Enrollment> enrollUser(Enrollment enrollment, boolean isSectionEnrollment) throws IOException {
         String createdUrl = null;
         if (isSectionEnrollment) {
             createdUrl = buildCanvasUrl("sections/" + enrollment.getCourseSectionId() + "/enrollments", Collections.emptyMap());

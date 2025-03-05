@@ -6,13 +6,11 @@ import edu.ksu.canvas.interfaces.ModuleReader;
 import edu.ksu.canvas.model.Module;
 import edu.ksu.canvas.net.FakeRestClient;
 import edu.ksu.canvas.requestOptions.ListModulesOptions;
-import org.apache.hc.core5.http.ParseException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.Date;
 import java.util.List;
 
@@ -32,7 +30,7 @@ class ModuleListingTest extends CanvasTestBase {
     }
 
     @Test
-    void testListModulesInCourse() throws IOException, URISyntaxException, ParseException {
+    void testListModulesInCourse() throws IOException {
         Long courseId = 1092L;
         ListModulesOptions options = new ListModulesOptions(courseId).studentId("526007");
         String url = baseUrl + "/api/v1/courses/1092/modules?student_id=526007";
