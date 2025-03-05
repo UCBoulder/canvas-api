@@ -8,6 +8,7 @@ import edu.ksu.canvas.net.Response;
 import edu.ksu.canvas.net.RestClient;
 import edu.ksu.canvas.oauth.OauthToken;
 import edu.ksu.canvas.requestOptions.GetQuizQuestionsOptions;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

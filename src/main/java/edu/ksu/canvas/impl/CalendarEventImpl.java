@@ -58,7 +58,7 @@ public class CalendarEventImpl extends BaseImpl<CalendarEvent, CalendarReader, C
     }
 
     @Override
-    public List<CalendarEvent> listCalendarEvents(String userId, ListCalendarEventsOptions options) throws IOException {
+    public List<CalendarEvent> listCalendarEvents(String userId, ListCalendarEventsOptions options) throws  IOException {
         LOG.debug("List calendar events for user {}", userId);
         String url = buildCanvasUrl("users/" + userId + "/calendar_events", options.getOptionsMap());
         return getListFromCanvas(url);

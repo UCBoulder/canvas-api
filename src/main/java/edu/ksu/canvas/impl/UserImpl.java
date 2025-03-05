@@ -12,6 +12,7 @@ import edu.ksu.canvas.oauth.OauthToken;
 import edu.ksu.canvas.requestOptions.CreateUserOptions;
 import edu.ksu.canvas.requestOptions.GetUsersInAccountOptions;
 import edu.ksu.canvas.requestOptions.GetUsersInCourseOptions;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
