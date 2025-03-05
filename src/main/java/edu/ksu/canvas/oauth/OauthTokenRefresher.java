@@ -10,11 +10,13 @@ import org.apache.hc.client5.http.classic.methods.HttpPost;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
 import org.apache.hc.client5.http.impl.classic.HttpClientBuilder;
 import org.apache.hc.core5.http.io.entity.EntityUtils;
+import org.apache.hc.core5.util.Timeout;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.time.Duration;
 import java.util.concurrent.TimeUnit;
 
 public class OauthTokenRefresher implements Serializable {
@@ -36,8 +38,8 @@ public class OauthTokenRefresher implements Serializable {
     public TokenRefreshResponse getNewToken(String refreshToken) throws IOException {
         LOG.debug("Getting a fresh OAuth access token");
         ConnectionConfig connConfig = ConnectionConfig.custom()
-            .setConnectTimeout(TIMEOUT_SECONDS*1000, TimeUnit.MILLISECONDS)
-            .setSocketTimeout(TIMEOUT_SECONDS*1000, TimeUnit.MILLISECONDS)
+            .setConnectTimeout(Timeout.of(Duration.ofSeconds(TIMEOUT_SECONDS)))
+            .setSocketTimeout(Timeout.of(Duration.ofSeconds(TIMEOUT_SECONDS)))
             .build();
         BasicHttpClientConnectionManager cm = new BasicHttpClientConnectionManager();
         cm.setConnectionConfig(connConfig);
