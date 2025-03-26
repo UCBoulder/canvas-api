@@ -34,7 +34,7 @@ class CourseListingUTest extends CanvasTestBase {
     }
 
     @Test
-    void testGettingCoursesForCurrentUser() throws IOException {
+    void testGettingCoursesForCurrentUser() throws IOException{
         String url = baseUrl + "/api/v1/courses";
         fakeRestClient.addSuccessResponse(url, "SampleJson/course/UserCourseListResponse.json");
         List<Course> userCourses = courseReader.listCurrentUserCourses(new ListCurrentUserCoursesOptions());

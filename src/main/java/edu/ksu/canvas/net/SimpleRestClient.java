@@ -11,32 +11,35 @@ import edu.ksu.canvas.model.status.CanvasErrorResponse;
 import edu.ksu.canvas.model.status.CanvasErrorResponse.ErrorMessage;
 import edu.ksu.canvas.oauth.OauthToken;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.http.Header;
-import org.apache.http.HttpHeaders;
-import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.config.CookieSpecs;
-import org.apache.http.client.config.RequestConfig;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpEntityEnclosingRequestBase;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.client.methods.HttpPut;
-import org.apache.http.client.methods.HttpRequestBase;
-import org.apache.http.entity.ContentType;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.entity.mime.content.ContentBody;
-import org.apache.http.entity.mime.content.FileBody;
-import org.apache.http.entity.mime.content.InputStreamBody;
-import org.apache.http.entity.mime.HttpMultipartMode;
-import org.apache.http.entity.mime.MultipartEntityBuilder;
-import org.apache.http.impl.client.BasicResponseHandler;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.util.EntityUtils;
+import org.apache.hc.client5.http.config.ConnectionConfig;
+import org.apache.hc.client5.http.impl.classic.BasicHttpClientResponseHandler;
+import org.apache.hc.client5.http.impl.classic.HttpClients;
+import org.apache.hc.client5.http.impl.io.BasicHttpClientConnectionManager;
+import org.apache.hc.core5.http.ClassicHttpRequest;
+import org.apache.hc.core5.http.Header;
+import org.apache.hc.core5.http.HttpHeaders;
+import org.apache.hc.core5.http.ClassicHttpResponse;
+import org.apache.hc.core5.http.NameValuePair;
+import org.apache.hc.client5.http.classic.HttpClient;
+import org.apache.hc.client5.http.cookie.StandardCookieSpec;
+import org.apache.hc.client5.http.config.RequestConfig;
+import org.apache.hc.client5.http.entity.UrlEncodedFormEntity;
+import org.apache.hc.core5.http.ParseException;
+import org.apache.hc.client5.http.classic.methods.HttpGet;
+import org.apache.hc.client5.http.classic.methods.HttpPost;
+import org.apache.hc.client5.http.classic.methods.HttpPut;
+import org.apache.hc.client5.http.classic.methods.HttpUriRequestBase;
+import org.apache.hc.core5.http.ContentType;
+import org.apache.hc.core5.http.io.entity.StringEntity;
+import org.apache.hc.client5.http.entity.mime.ContentBody;
+import org.apache.hc.client5.http.entity.mime.FileBody;
+import org.apache.hc.client5.http.entity.mime.InputStreamBody;
+import org.apache.hc.client5.http.entity.mime.HttpMultipartMode;
+import org.apache.hc.client5.http.entity.mime.MultipartEntityBuilder;
+import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
+import org.apache.hc.client5.http.impl.classic.HttpClientBuilder;
+import org.apache.hc.core5.http.message.BasicNameValuePair;
+import org.apache.hc.core5.http.io.entity.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -45,10 +48,13 @@ import java.io.File;
 import java.io.InputStream;
 import java.io.IOException;
 import java.net.URI;
+import java.net.URISyntaxException;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 public class SimpleRestClient implements RestClient {
@@ -73,11 +79,10 @@ public class SimpleRestClient implements RestClient {
             HttpGet httpGet = new HttpGet(url);
             httpGet.setHeader("Authorization", "Bearer" + " " + token.getAccessToken());
 
-            try (CloseableHttpResponse httpResponse = httpClient.execute(httpGet)) {
-
+            httpClient.execute(httpGet, httpResponse -> {
                 //deal with the actual content
                 response.setContent(handleResponse(httpResponse, httpGet));
-                response.setResponseCode(httpResponse.getStatusLine().getStatusCode());
+                response.setResponseCode(httpResponse.getCode());
                 Long endTime = System.currentTimeMillis();
                 LOG.debug("GET call took: " + (endTime - beginTime) + "ms");
 
@@ -95,9 +100,9 @@ public class SimpleRestClient implements RestClient {
                         response.setNextLink(nextLink);
                     }
                 }
-            }
+                return response;
+            });
         }
-
         return response;
     }
 
@@ -118,7 +123,7 @@ public class SimpleRestClient implements RestClient {
         Response response = new Response();
 
         HttpClient httpClient = createHttpClient(connectTimeout, readTimeout);
-        HttpEntityEnclosingRequestBase action;
+        HttpUriRequestBase action;
         if("POST".equals(method)) {
             action = new HttpPost(url);
         } else if("PUT".equals(method)) {
@@ -132,16 +137,16 @@ public class SimpleRestClient implements RestClient {
         StringEntity requestBody = new StringEntity(json, ContentType.APPLICATION_JSON);
         action.setEntity(requestBody);
         try {
-            HttpResponse httpResponse = httpClient.execute(action);
-
-            String content = handleResponse(httpResponse, action);
-
-            response.setContent(content);
-            response.setResponseCode(httpResponse.getStatusLine().getStatusCode());
-            Long endTime = System.currentTimeMillis();
-            LOG.debug("POST call took: " + (endTime - beginTime) + "ms");
+            httpClient.execute(action, httpResponse -> {
+                String content = handleResponse(httpResponse, action);
+                response.setContent(content);
+                response.setResponseCode(httpResponse.getCode());
+                Long endTime = System.currentTimeMillis();
+                LOG.debug("POST call took: " + (endTime - beginTime) + "ms");
+                return httpResponse;
+            });
         } finally {
-            action.releaseConnection();
+            action.reset();
         }
 
         return response;
@@ -158,14 +163,15 @@ public class SimpleRestClient implements RestClient {
         httpPost.setHeader("Authorization", "Bearer" + " " + token.getAccessToken());
         List<NameValuePair> params = convertParameters(postParameters);
 
-        httpPost.setEntity(new UrlEncodedFormEntity(params, CanvasConstants.URLENCODING_TYPE));
-        HttpResponse httpResponse =  httpClient.execute(httpPost);
-        String content = handleResponse(httpResponse, httpPost);
-
-        response.setContent(content);
-        response.setResponseCode(httpResponse.getStatusLine().getStatusCode());
-        Long endTime = System.currentTimeMillis();
-        LOG.debug("POST call took: " + (endTime - beginTime) + "ms");
+        httpPost.setEntity(new UrlEncodedFormEntity(params, Charset.forName(CanvasConstants.URLENCODING_TYPE)));
+        httpClient.execute(httpPost, httpResponse -> {
+            String content = handleResponse(httpResponse, httpPost);
+            response.setContent(content);
+            response.setResponseCode(httpResponse.getCode());
+            Long endTime = System.currentTimeMillis();
+            LOG.debug("POST call took: " + (endTime - beginTime) + "ms");
+            return httpResponse;
+        });
         return response;
     }
 
@@ -181,7 +187,7 @@ public class SimpleRestClient implements RestClient {
         List<NameValuePair> params = convertParameters(postParameters);
 
         MultipartEntityBuilder entityBuilder = MultipartEntityBuilder.create();
-        entityBuilder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
+        entityBuilder.setMode(HttpMultipartMode.LEGACY);
         if(is == null) {
             FileBody fileBody = new FileBody(new File(filePath));
             entityBuilder.addPart(fileParameter, fileBody);
@@ -193,13 +199,15 @@ public class SimpleRestClient implements RestClient {
         }
 
         httpPost.setEntity(entityBuilder.build());
-        HttpResponse httpResponse =  httpClient.execute(httpPost);
-        String content = handleResponse(httpResponse, httpPost);
+        httpClient.execute(httpPost, httpResponse -> {
+            String content = handleResponse(httpResponse, httpPost);
 
-        response.setContent(content);
-        response.setResponseCode(httpResponse.getStatusLine().getStatusCode());
-        Long endTime = System.currentTimeMillis();
-        LOG.debug("POST file call took: " + (endTime - beginTime) + "ms");
+            response.setContent(content);
+            response.setResponseCode(httpResponse.getCode());
+            Long endTime = System.currentTimeMillis();
+            LOG.debug("POST file call took: " + (endTime - beginTime) + "ms");
+            return httpResponse;
+        });
         return response;
     }
 
@@ -214,14 +222,16 @@ public class SimpleRestClient implements RestClient {
         httpPut.setHeader("Authorization", "Bearer" + " " + token.getAccessToken());
         List<NameValuePair> params = convertParameters(putParameters);
 
-        httpPut.setEntity(new UrlEncodedFormEntity(params, CanvasConstants.URLENCODING_TYPE));
-        HttpResponse httpResponse =  httpClient.execute(httpPut);
-        String content = handleResponse(httpResponse, httpPut);
+        httpPut.setEntity(new UrlEncodedFormEntity(params, Charset.forName(CanvasConstants.URLENCODING_TYPE)));
+        httpClient.execute(httpPut, httpResponse -> {
+            String content = handleResponse(httpResponse, httpPut);
 
-        response.setContent(content);
-        response.setResponseCode(httpResponse.getStatusLine().getStatusCode());
-        Long endTime = System.currentTimeMillis();
-        LOG.debug("PUT call took: " + (endTime - beginTime) + "ms");
+            response.setContent(content);
+            response.setResponseCode(httpResponse.getCode());
+            Long endTime = System.currentTimeMillis();
+            LOG.debug("PUT call took: " + (endTime - beginTime) + "ms");
+            return httpResponse;
+        });
         return response;
     }
 
@@ -237,26 +247,30 @@ public class SimpleRestClient implements RestClient {
 
         //This class is defined here because we need to be able to add form body elements to a delete request for a few api calls.
         class HttpDeleteWithBody extends HttpPost {
+            public HttpDeleteWithBody(URI uri) {
+                super(uri);
+            }
+
             @Override
             public String getMethod() {
                 return "DELETE";
             }
         }
 
-        HttpDeleteWithBody httpDelete = new HttpDeleteWithBody();
-
-        httpDelete.setURI(URI.create(url));
+        HttpDeleteWithBody httpDelete = new HttpDeleteWithBody(URI.create(url));
+        httpDelete.setUri(URI.create(url));
         httpDelete.setHeader("Authorization", "Bearer" + " " + token.getAccessToken());
         List<NameValuePair> params = convertParameters(deleteParameters);
 
-        httpDelete.setEntity(new UrlEncodedFormEntity(params, CanvasConstants.URLENCODING_TYPE));
-        HttpResponse httpResponse = httpClient.execute(httpDelete);
-
-        String content = handleResponse(httpResponse, httpDelete);
-        response.setContent(content);
-        response.setResponseCode(httpResponse.getStatusLine().getStatusCode());
-        Long endTime = System.currentTimeMillis();
-        LOG.debug("DELETE call took: " + (endTime - beginTime) + "ms");
+        httpDelete.setEntity(new UrlEncodedFormEntity(params, Charset.forName(CanvasConstants.URLENCODING_TYPE)));
+        httpClient.execute(httpDelete, httpResponse -> {
+            String content = handleResponse(httpResponse, httpDelete);
+            response.setContent(content);
+            response.setResponseCode(httpResponse.getCode());
+            Long endTime = System.currentTimeMillis();
+            LOG.debug("DELETE call took: " + (endTime - beginTime) + "ms");
+            return httpResponse;
+        });
 
         return response;
     }
@@ -279,29 +293,30 @@ public class SimpleRestClient implements RestClient {
         entityBuilder.addPart("file", fileBody);
         httpPost.setEntity(entityBuilder.build());
 
-        HttpResponse httpResponse = client.execute(httpPost);
-        checkHeaders(httpResponse, httpPost, true);
-        int httpStatus = httpResponse.getStatusLine().getStatusCode();
-        if (httpStatus == 201 || (300 <= httpStatus && httpStatus <= 399)) {
-            Header location = httpResponse.getFirstHeader("Location");
-            if (location != null) {
-                return location.getValue();
+        return client.execute(httpPost, httpResponse -> {
+            checkHeaders(httpResponse, httpPost, true);
+            int httpStatus = httpResponse.getCode();
+            if (httpStatus == 201 || (300 <= httpStatus && httpStatus <= 399)) {
+                Header location = httpResponse.getFirstHeader("Location");
+                if (location != null) {
+                    return location.getValue();
+                } else {
+                    throw new CanvasException("No location to redirect to when uploading file: " + httpStatus, uploadUrl);
+                }
             } else {
-                throw new CanvasException("No location to redirect to when uploading file: " + httpStatus, uploadUrl);
+                throw new CanvasException("Bad status when uploading file: "+ httpStatus, uploadUrl);
             }
-        } else {
-            throw new CanvasException("Bad status when uploading file: "+ httpStatus, uploadUrl);
-        }
-
+        });
     }
 
-    private void checkHeaders(HttpResponse httpResponse, HttpRequestBase request, boolean allowRedirect) {
-        int statusCode = httpResponse.getStatusLine().getStatusCode();
+    private void checkHeaders(ClassicHttpResponse httpResponse, HttpUriRequestBase request, boolean allowRedirect) {
+        int statusCode = httpResponse.getCode();
         double rateLimitThreshold = 0.1;
         double xRateCost = 0;
         double xRateLimitRemaining = 0;
-
+        URI uri = null;
         try {
+            uri = request.getUri();
             xRateCost = Double.parseDouble(httpResponse.getFirstHeader("x-request-cost").getValue());
             xRateLimitRemaining = Double.parseDouble(httpResponse.getFirstHeader("x-rate-limit-remaining").getValue());
 
@@ -309,11 +324,13 @@ public class SimpleRestClient implements RestClient {
             //See https://canvas.instructure.com/doc/api/file.throttling.html.
             if(xRateLimitRemaining < rateLimitThreshold) {
                 LOG.error("Canvas API rate limit exceeded. Bucket quota: " + xRateLimitRemaining + " Cost: " + xRateCost
-                        + " Threshold: " + rateLimitThreshold + " HTTP status: " + statusCode + " Requested URL: " + request.getURI());
-                throw new RateLimitException(extractErrorMessageFromResponse(httpResponse), String.valueOf(request.getURI()));
+                        + " Threshold: " + rateLimitThreshold + " HTTP status: " + statusCode + " Requested URL: " + uri);
+                throw new RateLimitException(extractErrorMessageFromResponse(httpResponse), String.valueOf(uri));
             }
         } catch (NullPointerException e) {
             LOG.debug("Rate not being limited: " + e);
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
         }
         if (statusCode == 401) {
             //If the WWW-Authenticate header is set, it is a token problem.
@@ -327,33 +344,37 @@ public class SimpleRestClient implements RestClient {
             throw new UnauthorizedException();
         }
         if(statusCode == 403) {
-            LOG.error("Canvas has throttled this request. Requested URL: " + request.getURI());
-            throw new ThrottlingException(extractErrorMessageFromResponse(httpResponse), String.valueOf(request.getURI()));
+            LOG.error("Canvas has throttled this request. Requested URL: " + uri);
+            throw new ThrottlingException(extractErrorMessageFromResponse(httpResponse), String.valueOf(uri));
         }
         if(statusCode == 404) {
-            LOG.error("Object not found in Canvas. Requested URL: " + request.getURI());
-            throw new ObjectNotFoundException(extractErrorMessageFromResponse(httpResponse), String.valueOf(request.getURI()));
+            LOG.error("Object not found in Canvas. Requested URL: " + uri);
+            throw new ObjectNotFoundException(extractErrorMessageFromResponse(httpResponse), String.valueOf(uri));
         }
         if(statusCode == 504) {
-            LOG.error("504 Gateway Time-out while requesting: " + request.getURI());
-            throw new RetriableException("status code: 504, reason phrase: Gateway Time-out", String.valueOf(request.getURI()));
+            LOG.error("504 Gateway Time-out while requesting: " + uri);
+            throw new RetriableException("status code: 504, reason phrase: Gateway Time-out", String.valueOf(uri));
         }
         // If we receive a 5xx exception, we should not wrap it in an unchecked exception for upstream clients to deal with.
         if(statusCode < 200 || (statusCode > (allowRedirect?399:299) && statusCode <= 499)) {
-            LOG.error("HTTP status " + statusCode + " returned from " + request.getURI());
+            LOG.error("HTTP status " + statusCode + " returned from " + uri);
             handleError(request, httpResponse);
         }
         //TODO Handling of 422 when the entity is malformed.
     }
 
-    private void handleError(HttpRequestBase httpRequest, HttpResponse httpResponse) {
+    private void handleError(ClassicHttpRequest httpRequest, ClassicHttpResponse httpResponse) {
         for (ErrorHandler handler : errorHandlers) {
             if (handler.shouldHandle(httpRequest, httpResponse)) {
                 handler.handle(httpRequest, httpResponse);
             }
         }
         String canvasErrorString = extractErrorMessageFromResponse(httpResponse);
-        throw new CanvasException(canvasErrorString, String.valueOf(httpRequest.getURI()));
+        try {
+            throw new CanvasException(canvasErrorString, String.valueOf(httpRequest.getUri()));
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
@@ -365,8 +386,8 @@ public class SimpleRestClient implements RestClient {
      * @param response HttpResponse object representing the error response from Canvas
      * @return The Canvas human-readable error string or null if unable to extract it
      */
-    private String extractErrorMessageFromResponse(HttpResponse response) {
-        String contentType = response.getEntity().getContentType().getValue();
+    private String extractErrorMessageFromResponse(ClassicHttpResponse response) {
+        String contentType = response.getEntity().getContentType();
         String message = null;
         if(contentType.contains("application/json")) {
             Gson gson = GsonResponseParser.getDefaultGsonParser(false);
@@ -393,9 +414,9 @@ public class SimpleRestClient implements RestClient {
         return message;
     }
 
-    private String handleResponse(HttpResponse httpResponse, HttpRequestBase request) throws IOException {
+    private String handleResponse(ClassicHttpResponse httpResponse, HttpUriRequestBase request) throws IOException {
         checkHeaders(httpResponse, request, false);
-        return new BasicResponseHandler().handleResponse(httpResponse);
+        return new BasicHttpClientResponseHandler().handleResponse(httpResponse);
     }
 
     private CloseableHttpClient createHttpClient(int connectTimeout, int readTimeout) {
@@ -403,12 +424,17 @@ public class SimpleRestClient implements RestClient {
     }
 
     private HttpClientBuilder buildHttpClient(int connectTimeout, int readTimeout) {
+        ConnectionConfig connConfig = ConnectionConfig.custom()
+            .setConnectTimeout(connectTimeout, TimeUnit.MILLISECONDS)
+            .setSocketTimeout(readTimeout, TimeUnit.MILLISECONDS)
+            .build();
         RequestConfig config = RequestConfig.custom()
-                .setConnectTimeout(connectTimeout)
-                .setSocketTimeout(readTimeout)
-                .setCookieSpec(CookieSpecs.STANDARD)
+                .setCookieSpec(StandardCookieSpec.RELAXED)
                 .build();
-        return HttpClientBuilder.create()
+        BasicHttpClientConnectionManager cm = new BasicHttpClientConnectionManager();
+        cm.setConnectionConfig(connConfig);
+        return HttpClients.custom()
+                .setConnectionManager(cm)
                 .setDefaultRequestConfig(config);
     }
 

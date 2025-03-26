@@ -2,7 +2,6 @@ package edu.ksu.canvas.impl;
 
 import com.google.gson.reflect.TypeToken;
 
-import edu.ksu.canvas.interfaces.CourseReader;
 import edu.ksu.canvas.interfaces.EnrollmentReader;
 import edu.ksu.canvas.interfaces.EnrollmentWriter;
 import edu.ksu.canvas.model.Enrollment;
