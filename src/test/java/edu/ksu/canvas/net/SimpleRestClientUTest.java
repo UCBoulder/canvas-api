@@ -76,7 +76,7 @@ public class SimpleRestClientUTest extends LocalServerTestBase {
         String url = "/unavailableServiceUrl";
         registerUrlResponse(url, "", 503, Collections.emptyMap());
 
-        assertThrows(IOException.class, () -> {
+        assertThrows(RetriableException.class, () -> {
             final Response response = restClient.sendApiGet(emptyAdminToken, baseUrl + url, 100, 100);
         });
     }
